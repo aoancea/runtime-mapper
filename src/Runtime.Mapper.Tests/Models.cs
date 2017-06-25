@@ -5,6 +5,8 @@ namespace Runtime.Mapper.Tests
 {
     internal class BaseClass
     {
+        #region Primitives - Value
+
         public int Int { get; set; }
 
         public decimal Decimal { get; set; }
@@ -17,19 +19,51 @@ namespace Runtime.Mapper.Tests
 
         public bool Bool { get; set; }
 
+        #endregion
+
+        #region Primitives - Default
+
+        public int IntDefault { get; set; }
+
+        public decimal DecimalDefault { get; set; }
+
+        public string StringDefault { get; set; }
+
+        public DateTime DateTimeDefault { get; set; }
+
+        public Guid GuidDefault { get; set; }
+
+        public bool BoolDefault { get; set; }
+
+        #endregion
+
         //public Dictionary<Guid, string> Dictionary { get; set; }
 
-        #region Nullable primitives
+        #region Nullable primitives - Value
 
-        //public int? IntNullable { get; set; }
+        public int? IntNullable { get; set; }
 
-        //public decimal? DecimalNullable { get; set; }
+        public decimal? DecimalNullable { get; set; }
 
-        //public DateTime DateTimeNullable { get; set; }
+        public DateTime? DateTimeNullable { get; set; }
 
-        //public Guid? GuidNullable { get; set; }
+        public Guid? GuidNullable { get; set; }
 
-        //public bool? BoolNullable { get; set; }
+        public bool? BoolNullable { get; set; }
+
+        #endregion
+
+        #region Nullable primitives - Default
+
+        public int? IntNullableDefault { get; set; }
+
+        public decimal? DecimalNullableDefault { get; set; }
+
+        public DateTime? DateTimeNullableDefault { get; set; }
+
+        public Guid? GuidNullableDefault { get; set; }
+
+        public bool? BoolNullableDefault { get; set; }
 
         #endregion
 

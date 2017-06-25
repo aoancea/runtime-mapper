@@ -13,20 +13,37 @@ namespace Runtime.Mapper.Tests
         {
             return new Cow()
             {
+                // Primitives - Value
                 Bool = Constants.Bool.value1,
                 DateTime = Constants.DateTime.value1,
                 Decimal = Constants.Decimal.value1,
                 Guid = Constants.Guid.value1,
                 Int = Constants.Int.value1,
                 String = Constants.String.value1,
+
+                // Primitives - Default
+                BoolDefault = default(bool),
+                DateTimeDefault = default(DateTime),
+                DecimalDefault = default(decimal),
+                GuidDefault = default(Guid),
+                IntDefault = default(int),
+                StringDefault = default(string),
+
                 //Dictionary = new Dictionary<Guid, string>() { { Constants.Guid.value3, "value1" } },
 
-                // Nullable primitives
-                //BoolNullable = Constants.Bool.value1,
-                //DateTimeNullable = Constants.DateTime.value1,
-                //DecimalNullable = Constants.Decimal.value1,
-                //GuidNullable = Constants.Guid.value1,
-                //IntNullable = Constants.Int.value1,
+                // Nullable primitives - Value
+                BoolNullable = Constants.Bool.value1,
+                DateTimeNullable = Constants.DateTime.value1,
+                DecimalNullable = Constants.Decimal.value1,
+                GuidNullable = Constants.Guid.value1,
+                IntNullable = Constants.Int.value1,
+
+                // Nullable primitives - Null
+                BoolNullableDefault = default(bool?),
+                DateTimeNullableDefault = default(DateTime?),
+                DecimalNullableDefault = default(decimal?),
+                GuidNullableDefault = default(Guid?),
+                IntNullableDefault = default(int?),
 
                 // Array of primitives
                 //BoolArray = new bool[] { Constants.Bool.value1, Constants.Bool.value2 },
@@ -59,20 +76,37 @@ namespace Runtime.Mapper.Tests
 
         private static void Assert_BaseClass(BaseClass baseClass)
         {
+            // Primitives - Value
             Assert.AreEqual(Constants.Bool.value1, baseClass.Bool);
             Assert.AreEqual(Constants.DateTime.value1, baseClass.DateTime);
             Assert.AreEqual(Constants.Decimal.value1, baseClass.Decimal);
             Assert.AreEqual(Constants.Guid.value1, baseClass.Guid);
             Assert.AreEqual(Constants.Int.value1, baseClass.Int);
             Assert.AreEqual(Constants.String.value1, baseClass.String);
+
+            // Primitives - Default
+            Assert.AreEqual(false, baseClass.BoolDefault);
+            Assert.AreEqual(DateTime.MinValue, baseClass.DateTimeDefault);
+            Assert.AreEqual(decimal.Zero, baseClass.DecimalDefault);
+            Assert.AreEqual(Guid.Empty, baseClass.GuidDefault);
+            Assert.AreEqual(0, baseClass.IntDefault);
+            Assert.AreEqual(null, baseClass.StringDefault);
+
             //Assert.AreEqual("value1", baseClass.Dictionary[Constants.Guid.value3]);
 
-            // Nullable primitives
-            //Assert.AreEqual(Constants.Bool.value1, baseClass.BoolNullable);
-            //Assert.AreEqual(Constants.DateTime.value1, baseClass.DateTimeNullable);
-            //Assert.AreEqual(Constants.Decimal.value1, baseClass.DecimalNullable);
-            //Assert.AreEqual(Constants.Guid.value1, baseClass.GuidNullable);
-            //Assert.AreEqual(Constants.Int.value1, baseClass.IntNullable);
+            // Nullable primitives - Value
+            Assert.AreEqual(Constants.Bool.value1, baseClass.BoolNullable);
+            Assert.AreEqual(Constants.DateTime.value1, baseClass.DateTimeNullable);
+            Assert.AreEqual(Constants.Decimal.value1, baseClass.DecimalNullable);
+            Assert.AreEqual(Constants.Guid.value1, baseClass.GuidNullable);
+            Assert.AreEqual(Constants.Int.value1, baseClass.IntNullable);
+
+            // Nullable primitives - Null
+            Assert.AreEqual(null, baseClass.BoolNullableDefault);
+            Assert.AreEqual(null, baseClass.DateTimeNullableDefault);
+            Assert.AreEqual(null, baseClass.DecimalNullableDefault);
+            Assert.AreEqual(null, baseClass.GuidNullableDefault);
+            Assert.AreEqual(null, baseClass.IntNullableDefault);
 
             // Array of primitives
             //Assert.AreEqual(Constants.Bool.value1, baseClass.BoolArray[0]);
