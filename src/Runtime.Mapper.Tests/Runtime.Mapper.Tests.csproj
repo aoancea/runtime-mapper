@@ -51,9 +51,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Cow.cs" />
     <Compile Include="MapperTest_Map.cs" />
     <Compile Include="MapperTest_DeepCopyTo.cs" />
+    <Compile Include="Models.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
