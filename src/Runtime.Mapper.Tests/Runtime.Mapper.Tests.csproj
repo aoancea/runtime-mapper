@@ -51,10 +51,12 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="MapperTest_Map.cs" />
     <Compile Include="MapperTest_DeepCopyTo.cs" />
     <Compile Include="Models.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScenarioHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Runtime.Mapper\Runtime.Mapper.csproj">
