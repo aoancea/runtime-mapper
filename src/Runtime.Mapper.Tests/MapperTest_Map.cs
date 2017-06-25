@@ -3,7 +3,7 @@
 namespace Runtime.Mapper.Tests
 {
     [TestClass]
-    public class UnitTest1
+    public class MapperTest_Map
     {
         [TestMethod]
         public void Map_SourceAndDestinationTypeAreTheSame_DestinationCopied()
@@ -14,11 +14,23 @@ namespace Runtime.Mapper.Tests
 
             Mapper.Map(source, destination);
 
-            Assert.AreEqual(source, source);
-            Assert.AreEqual(destination, destination);
             Assert.AreNotEqual(source, destination);
 
             ScenarioHelper.Assert_Cow(destination);
+        }
+
+        [TestMethod]
+        public void Map_SourceAndDestinationAreDifferentTypeButContainTheSameProperties_DestinationCopied()
+        {
+            Cow source = ScenarioHelper.Create_Cow();
+
+            Mule destination = new Mule();
+
+            Mapper.Map(source, destination);
+
+            Assert.AreNotEqual(source, destination);
+
+            ScenarioHelper.Assert_Mule(destination);
         }
     }
 }

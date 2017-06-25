@@ -47,7 +47,7 @@ namespace Runtime.Mapper
             ParameterExpression destinationVar = Expression.Variable(destinationType, "destination");
 
             expressions.Add(Expression.Assign(sourceVar, Expression.Convert(sourceParam, sourceType)));
-            expressions.Add(Expression.Assign(destinationVar, Expression.Convert(Expression.Constant(null), sourceType)));
+            expressions.Add(Expression.Assign(destinationVar, Expression.Convert(Expression.Constant(null), destinationType)));
 
             Expression assignDestinationExpresion = Expression.IfThenElse(Expression.Equal(destinationParam, Expression.Constant(null)),
                 Expression.Assign(destinationVar, Expression.New(destinationType)),

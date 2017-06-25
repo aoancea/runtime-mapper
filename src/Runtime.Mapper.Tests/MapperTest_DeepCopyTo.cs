@@ -16,5 +16,17 @@ namespace Runtime.Mapper.Tests
 
             ScenarioHelper.Assert_Cow(destination);
         }
+
+        [TestMethod]
+        public void DeepCopyTo_SourceAndDestinationAreDifferentTypeButContainTheSameProperties_DestinationCopied()
+        {
+            Cow source = ScenarioHelper.Create_Cow();
+
+            Mule destination = source.DeepCopyTo<Mule>();
+
+            Assert.AreNotEqual(source, destination);
+
+            ScenarioHelper.Assert_Mule(destination);
+        }
     }
 }
