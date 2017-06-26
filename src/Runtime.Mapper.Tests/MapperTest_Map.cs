@@ -16,7 +16,7 @@ namespace Runtime.Mapper.Tests
 
             Assert.AreNotEqual(source, destination);
 
-            ScenarioHelper.Assert_Cow(destination);
+            ScenarioHelper.Assert_Cow(source, destination);
         }
 
         [TestMethod]
@@ -30,7 +30,7 @@ namespace Runtime.Mapper.Tests
 
             Assert.AreNotEqual(source, destination);
 
-            ScenarioHelper.Assert_Mule(destination);
+            ScenarioHelper.Assert_Mule(source, destination);
         }
     }
 }

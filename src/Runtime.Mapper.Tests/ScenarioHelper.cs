@@ -63,78 +63,78 @@ namespace Runtime.Mapper.Tests
             };
         }
 
-        public static void Assert_Cow(Cow cow)
+        public static void Assert_Cow(BaseClass source, Cow destination)
         {
-            Assert_BaseClass(cow);
+            Assert_BaseClass(source, destination);
         }
 
-        public static void Assert_Mule(Mule mule)
+        public static void Assert_Mule(BaseClass source, Mule destination)
         {
-            Assert_BaseClass(mule);
+            Assert_BaseClass(source, destination);
         }
 
 
-        private static void Assert_BaseClass(BaseClass baseClass)
+        private static void Assert_BaseClass(BaseClass source, BaseClass destination)
         {
             // Primitives - Value
-            Assert.AreEqual(Constants.Bool.value1, baseClass.Bool);
-            Assert.AreEqual(Constants.DateTime.value1, baseClass.DateTime);
-            Assert.AreEqual(Constants.Decimal.value1, baseClass.Decimal);
-            Assert.AreEqual(Constants.Guid.value1, baseClass.Guid);
-            Assert.AreEqual(Constants.Int.value1, baseClass.Int);
-            Assert.AreEqual(Constants.String.value1, baseClass.String);
+            Assert.AreEqual(Constants.Bool.value1, destination.Bool);
+            Assert.AreEqual(Constants.DateTime.value1, destination.DateTime);
+            Assert.AreEqual(Constants.Decimal.value1, destination.Decimal);
+            Assert.AreEqual(Constants.Guid.value1, destination.Guid);
+            Assert.AreEqual(Constants.Int.value1, destination.Int);
+            Assert.AreEqual(Constants.String.value1, destination.String);
 
             // Primitives - Default
-            Assert.AreEqual(false, baseClass.BoolDefault);
-            Assert.AreEqual(DateTime.MinValue, baseClass.DateTimeDefault);
-            Assert.AreEqual(decimal.Zero, baseClass.DecimalDefault);
-            Assert.AreEqual(Guid.Empty, baseClass.GuidDefault);
-            Assert.AreEqual(0, baseClass.IntDefault);
-            Assert.AreEqual(null, baseClass.StringDefault);
+            Assert.AreEqual(false, destination.BoolDefault);
+            Assert.AreEqual(DateTime.MinValue, destination.DateTimeDefault);
+            Assert.AreEqual(decimal.Zero, destination.DecimalDefault);
+            Assert.AreEqual(Guid.Empty, destination.GuidDefault);
+            Assert.AreEqual(0, destination.IntDefault);
+            Assert.AreEqual(null, destination.StringDefault);
 
             //Assert.AreEqual("value1", baseClass.Dictionary[Constants.Guid.value3]);
 
             // Nullable primitives - Value
-            Assert.AreEqual(Constants.Bool.value1, baseClass.BoolNullable);
-            Assert.AreEqual(Constants.DateTime.value1, baseClass.DateTimeNullable);
-            Assert.AreEqual(Constants.Decimal.value1, baseClass.DecimalNullable);
-            Assert.AreEqual(Constants.Guid.value1, baseClass.GuidNullable);
-            Assert.AreEqual(Constants.Int.value1, baseClass.IntNullable);
+            Assert.AreEqual(Constants.Bool.value1, destination.BoolNullable);
+            Assert.AreEqual(Constants.DateTime.value1, destination.DateTimeNullable);
+            Assert.AreEqual(Constants.Decimal.value1, destination.DecimalNullable);
+            Assert.AreEqual(Constants.Guid.value1, destination.GuidNullable);
+            Assert.AreEqual(Constants.Int.value1, destination.IntNullable);
 
             // Nullable primitives - Null
-            Assert.AreEqual(null, baseClass.BoolNullableDefault);
-            Assert.AreEqual(null, baseClass.DateTimeNullableDefault);
-            Assert.AreEqual(null, baseClass.DecimalNullableDefault);
-            Assert.AreEqual(null, baseClass.GuidNullableDefault);
-            Assert.AreEqual(null, baseClass.IntNullableDefault);
+            Assert.AreEqual(null, destination.BoolNullableDefault);
+            Assert.AreEqual(null, destination.DateTimeNullableDefault);
+            Assert.AreEqual(null, destination.DecimalNullableDefault);
+            Assert.AreEqual(null, destination.GuidNullableDefault);
+            Assert.AreEqual(null, destination.IntNullableDefault);
 
             // Array of primitives
-            //Assert.AreEqual(Constants.Bool.value1, baseClass.BoolArray[0]);
-            //Assert.AreEqual(Constants.Bool.value2, baseClass.BoolArray[1]);
-            //Assert.AreEqual(Constants.DateTime.value1, baseClass.DateTimeArray[0]);
-            //Assert.AreEqual(Constants.DateTime.value2, baseClass.DateTimeArray[1]);
-            //Assert.AreEqual(Constants.Decimal.value1, baseClass.DecimalArray[0]);
-            //Assert.AreEqual(Constants.Decimal.value2, baseClass.DecimalArray[1]);
-            //Assert.AreEqual(Constants.Guid.value1, baseClass.GuidArray[0]);
-            //Assert.AreEqual(Constants.Guid.value2, baseClass.GuidArray[1]);
-            //Assert.AreEqual(Constants.Int.value1, baseClass.IntArray[0]);
-            //Assert.AreEqual(Constants.Int.value2, baseClass.IntArray[1]);
-            //Assert.AreEqual(Constants.String.value1, baseClass.StringArray[0]);
-            //Assert.AreEqual(Constants.String.value2, baseClass.StringArray[1]);
+            //Assert.AreEqual(Constants.Bool.value1, destination.BoolArray[0]);
+            //Assert.AreEqual(Constants.Bool.value2, destination.BoolArray[1]);
+            //Assert.AreEqual(Constants.DateTime.value1, destination.DateTimeArray[0]);
+            //Assert.AreEqual(Constants.DateTime.value2, destination.DateTimeArray[1]);
+            //Assert.AreEqual(Constants.Decimal.value1, destination.DecimalArray[0]);
+            //Assert.AreEqual(Constants.Decimal.value2, destination.DecimalArray[1]);
+            //Assert.AreEqual(Constants.Guid.value1, destination.GuidArray[0]);
+            //Assert.AreEqual(Constants.Guid.value2, destination.GuidArray[1]);
+            //Assert.AreEqual(Constants.Int.value1, destination.IntArray[0]);
+            //Assert.AreEqual(Constants.Int.value2, destination.IntArray[1]);
+            //Assert.AreEqual(Constants.String.value1, destination.StringArray[0]);
+            //Assert.AreEqual(Constants.String.value2, destination.StringArray[1]);
 
             // List of primitives
-            //Assert.AreEqual(Constants.Bool.value1, baseClass.BoolList[0]);
-            //Assert.AreEqual(Constants.Bool.value2, baseClass.BoolList[1]);
-            //Assert.AreEqual(Constants.DateTime.value1, baseClass.DateTimeList[0]);
-            //Assert.AreEqual(Constants.DateTime.value2, baseClass.DateTimeList[1]);
-            //Assert.AreEqual(Constants.Decimal.value1, baseClass.DecimalList[0]);
-            //Assert.AreEqual(Constants.Decimal.value2, baseClass.DecimalList[1]);
-            //Assert.AreEqual(Constants.Guid.value1, baseClass.GuidList[0]);
-            //Assert.AreEqual(Constants.Guid.value2, baseClass.GuidList[1]);
-            //Assert.AreEqual(Constants.Int.value1, baseClass.IntList[0]);
-            //Assert.AreEqual(Constants.Int.value2, baseClass.IntList[1]);
-            //Assert.AreEqual(Constants.String.value1, baseClass.StringList[0]);
-            //Assert.AreEqual(Constants.String.value2, baseClass.StringList[1]);
+            //Assert.AreEqual(Constants.Bool.value1, destination.BoolList[0]);
+            //Assert.AreEqual(Constants.Bool.value2, destination.BoolList[1]);
+            //Assert.AreEqual(Constants.DateTime.value1, destination.DateTimeList[0]);
+            //Assert.AreEqual(Constants.DateTime.value2, destination.DateTimeList[1]);
+            //Assert.AreEqual(Constants.Decimal.value1, destination.DecimalList[0]);
+            //Assert.AreEqual(Constants.Decimal.value2, destination.DecimalList[1]);
+            //Assert.AreEqual(Constants.Guid.value1, destination.GuidList[0]);
+            //Assert.AreEqual(Constants.Guid.value2, destination.GuidList[1]);
+            //Assert.AreEqual(Constants.Int.value1, destination.IntList[0]);
+            //Assert.AreEqual(Constants.Int.value2, destination.IntList[1]);
+            //Assert.AreEqual(Constants.String.value1, destination.StringList[0]);
+            //Assert.AreEqual(Constants.String.value2, destination.StringList[1]);
         }
     }
 }
