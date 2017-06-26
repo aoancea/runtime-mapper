@@ -74,11 +74,11 @@ namespace Runtime.Mapper
         {
             List<Expression> mapPropertyExpressions = new List<Expression>();
 
-            if (sourceType.IsArray || destinationType.IsArray || (sourceType.IsGenericType && sourceType.GetGenericTypeDefinition() == typeof(List<>)) || (destinationType.IsGenericType && destinationType.GetGenericTypeDefinition() == typeof(List<>)))
+            if (sourceType.IsArray || destinationType.IsArray || IsGenericList(sourceType) || IsGenericList(destinationType))
             {
                 // map array or list
             }
-            else if ((sourceType.IsGenericType && sourceType.GetGenericTypeDefinition() == typeof(Dictionary<,>)) || (destinationType.IsGenericType && destinationType.GetGenericTypeDefinition() == typeof(Dictionary<,>)))
+            else if (IsGenericDictionary(sourceType) || IsGenericDictionary(destinationType))
             {
                 // map dictionary
             }
@@ -113,6 +113,21 @@ namespace Runtime.Mapper
             }
 
             return Expression.Block(mapPropertyExpressions);
+        }
+
+
+
+
+
+
+        private static bool IsGenericList(Type type)
+        {
+            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>);
+        }
+
+        private static bool IsGenericDictionary(Type type)
+        {
+            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Dictionary<,>);
         }
     }
 }
