@@ -9,6 +9,12 @@ namespace Runtime.Mapper
 {
     public static class Mapper
     {
+        private static HashSet<Type> primitiveTypes = new HashSet<Type>(new List<Type>()
+        {
+            typeof(int),    typeof(decimal),    typeof(string),     typeof(Guid),   typeof(DateTime),   typeof(Enum),   typeof(bool),   typeof(char),
+            typeof(int?),   typeof(decimal?),                       typeof(Guid?),  typeof(DateTime?),                  typeof(bool?),  typeof(char?)
+        });
+
         private static ConcurrentDictionary<Tuple<Type, Type>, Func<object, object, object>> mappingFunctions = new ConcurrentDictionary<Tuple<Type, Type>, Func<object, object, object>>();
 
         public static TDestination DeepCopyTo<TDestination>(this object source)
@@ -55,7 +61,7 @@ namespace Runtime.Mapper
 
             expressions.Add(assignDestinationExpresion);
 
-            expressions.Add(MapPropertiesExpression(sourceType, destinationType, sourceVar, destinationVar));
+            expressions.Add(MapObjectExpression(sourceType, destinationType, sourceVar, destinationVar));
 
             expressions.Add(destinationVar);
 
@@ -80,6 +86,31 @@ namespace Runtime.Mapper
                 MemberExpression destinationPropertyAccessorExpression = Expression.Property(destinationVar, propertyName);
 
                 mapPropertyExpressions.Add(Expression.Assign(destinationPropertyAccessorExpression, sourcePropertyAccessorExpression));
+            }
+
+            return Expression.Block(mapPropertyExpressions);
+        }
+
+        private static Expression MapObjectExpression(Type sourceType, Type destinationType, ParameterExpression sourceVar, ParameterExpression destinationVar)
+        {
+            List<Expression> mapPropertyExpressions = new List<Expression>();
+
+            if (sourceType.IsArray || destinationType.IsArray || (sourceType.IsGenericType && sourceType.GetGenericTypeDefinition() == typeof(List<>)) || (destinationType.IsGenericType && destinationType.GetGenericTypeDefinition() == typeof(List<>)))
+            {
+                // map array or list
+            }
+            else if ((sourceType.IsGenericType && sourceType.GetGenericTypeDefinition() == typeof(Dictionary<,>)) || (destinationType.IsGenericType && destinationType.GetGenericTypeDefinition() == typeof(Dictionary<,>)))
+            {
+                // map dictionary
+            }
+            else if (primitiveTypes.Contains(sourceType))
+            {
+                // map primitive type => this should not be the case for now :)
+            }
+            else
+            {
+                // map object's properties
+                mapPropertyExpressions.Add(MapPropertiesExpression(sourceType, destinationType, sourceVar, destinationVar));
             }
 
             return Expression.Block(mapPropertyExpressions);
