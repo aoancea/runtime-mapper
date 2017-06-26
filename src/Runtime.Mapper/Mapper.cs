@@ -61,38 +61,13 @@ namespace Runtime.Mapper
 
             expressions.Add(assignDestinationExpresion);
 
-            expressions.Add(MapObjectExpression(sourceType, destinationType, sourceVar, destinationVar));
+            expressions.Add(MapPropertiesExpression(sourceType, destinationType, sourceVar, destinationVar));
 
             expressions.Add(destinationVar);
 
             LambdaExpression mappingFunctionLambda = Expression.Lambda(Expression.Block(new ParameterExpression[] { sourceVar, destinationVar }, expressions), new ParameterExpression[] { sourceParam, destinationParam });
 
             return (Func<object, object, object>)mappingFunctionLambda.Compile();
-        }
-
-        private static Expression MapObjectExpression(Type sourceType, Type destinationType, ParameterExpression sourceVar, ParameterExpression destinationVar)
-        {
-            List<Expression> mapPropertyExpressions = new List<Expression>();
-
-            if (sourceType.IsArray || destinationType.IsArray || IsGenericList(sourceType) || IsGenericList(destinationType))
-            {
-                // map array or list
-            }
-            else if (IsGenericDictionary(sourceType) || IsGenericDictionary(destinationType))
-            {
-                // map dictionary
-            }
-            else if (primitiveTypes.Contains(sourceType))
-            {
-                // map primitive type => this should not be the case for now :)
-            }
-            else
-            {
-                // map object's properties
-                mapPropertyExpressions.Add(MapPropertiesExpression(sourceType, destinationType, sourceVar, destinationVar));
-            }
-
-            return Expression.Block(mapPropertyExpressions);
         }
 
         private static Expression MapPropertiesExpression(Type sourceType, Type destinationType, ParameterExpression sourceVar, ParameterExpression destinationVar)
@@ -102,23 +77,38 @@ namespace Runtime.Mapper
             PropertyInfo[] sourceProperties = sourceType.GetProperties(BindingFlags.Instance | BindingFlags.Public).ToArray();
             PropertyInfo[] destinationProperties = destinationType.GetProperties(BindingFlags.Instance | BindingFlags.Public).ToArray();
 
-            string[] propertyNames = destinationProperties.Where(dp => sourceProperties.Any(sp => sp.Name == dp.Name)).Select(property => property.Name).ToArray();
+            PropertyInfo[] properties = destinationProperties.Where(dp => sourceProperties.Any(sp => sp.Name == dp.Name)).ToArray();
 
-            foreach (string propertyName in propertyNames)
+            foreach (PropertyInfo property in properties)
             {
-                MemberExpression sourcePropertyAccessorExpression = Expression.Property(sourceVar, propertyName);
-                MemberExpression destinationPropertyAccessorExpression = Expression.Property(destinationVar, propertyName);
+                Type sourcePropType = sourceProperties.First(x => x.Name == property.Name).PropertyType;
+                Type destinationPropType = destinationProperties.First(x => x.Name == property.Name).PropertyType;
 
-                mapPropertyExpressions.Add(Expression.Assign(destinationPropertyAccessorExpression, sourcePropertyAccessorExpression));
+                if (sourcePropType.IsArray || destinationPropType.IsArray || IsGenericList(sourcePropType) || IsGenericList(destinationPropType))
+                {
+                    // map array or list
+                }
+                else if (IsGenericDictionary(sourcePropType) || IsGenericDictionary(destinationPropType))
+                {
+                    // map dictionary
+                }
+                else if (primitiveTypes.Contains(sourcePropType))
+                {
+                    // map primitive type => this should not be the case for now :)
+
+                    MemberExpression sourcePropertyAccessorExpression = Expression.Property(sourceVar, property.Name);
+                    MemberExpression destinationPropertyAccessorExpression = Expression.Property(destinationVar, property.Name);
+
+                    mapPropertyExpressions.Add(Expression.Assign(destinationPropertyAccessorExpression, sourcePropertyAccessorExpression));
+                }
+                else
+                {
+                    // map custom object's properties
+                }
             }
 
             return Expression.Block(mapPropertyExpressions);
         }
-
-
-
-
-
 
         private static bool IsGenericList(Type type)
         {
