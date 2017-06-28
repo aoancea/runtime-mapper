@@ -84,7 +84,7 @@ namespace Runtime.Mapper
                 Expression initDestination = null;
                 Expression loopContent = null;
 
-                Expression destinationAccessor = null;
+                Expression sourceAccessor = null;
 
                 if (destinationType.IsArray)
                 {
@@ -94,14 +94,14 @@ namespace Runtime.Mapper
 
                     initDestination = Expression.Assign(destinationVar, Expression.NewArrayBounds(underlyingType, sourceLength));
 
-                    destinationAccessor = Expression.ArrayIndex(sourceVar, index);
+                    sourceAccessor = Expression.ArrayIndex(sourceVar, index);
 
                     if (!primitiveTypes.Contains(underlyingType))
                     {
-                        destinationAccessor = Expression.Call(miDeepCopyTo, destinationAccessor);
+                        sourceAccessor = Expression.Call(miDeepCopyTo, sourceAccessor);
                     }
 
-                    loopContent = Expression.Assign(Expression.ArrayAccess(destinationVar, index), destinationAccessor);
+                    loopContent = Expression.Assign(Expression.ArrayAccess(destinationVar, index), sourceAccessor);
                 }
                 else
                 {
@@ -111,14 +111,14 @@ namespace Runtime.Mapper
 
                     initDestination = Expression.Assign(destinationVar, Expression.New(destinationType.GetConstructor(new Type[] { typeof(int) }), new Expression[] { sourceLength }));
 
-                    destinationAccessor = Expression.MakeIndex(sourceVar, destinationType.GetProperty("Item"), new Expression[] { index });
+                    sourceAccessor = Expression.MakeIndex(sourceVar, destinationType.GetProperty("Item"), new Expression[] { index });
 
                     if (!primitiveTypes.Contains(underlyingType))
                     {
-                        destinationAccessor = Expression.Call(miDeepCopyTo, destinationAccessor);
+                        sourceAccessor = Expression.Call(miDeepCopyTo, sourceAccessor);
                     }
 
-                    loopContent = Expression.Call(destinationVar, destinationType.GetMethod("Add", new Type[] { destinationType.GetGenericArguments()[0] }), destinationAccessor);
+                    loopContent = Expression.Call(destinationVar, destinationType.GetMethod("Add", new Type[] { destinationType.GetGenericArguments()[0] }), sourceAccessor);
                 }
 
                 Expression loopCondition = Expression.LessThan(index, sourceLength);
