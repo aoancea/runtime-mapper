@@ -32,42 +32,6 @@ namespace Runtime.Mapper.Tests
 		}
 
 
-		[TestMethod]
-		public void DeepCopyTo_ArrayToArrayOfSameType_DestinationCopied()
-		{
-			Cow[] source = new Cow[1]
-			{
-				 ScenarioHelper.Create_Cow()
-			};
-
-			Cow[] destination = source.DeepCopyTo<Cow[]>();
-
-			Assert.AreNotEqual(source, destination);
-			Assert.AreEqual(1, destination.Length);
-			Assert.AreNotEqual(source[0], destination[0]);
-
-			ScenarioHelper.Assert_Cow(source[0], destination[0]);
-		}
-
-
-		[TestMethod]
-		public void DeepCopyTo_ListToListOfSameType_DestinationCopied()
-		{
-			List<Cow> source = new List<Cow>
-			{
-				 ScenarioHelper.Create_Cow()
-			};
-
-			List<Cow> destination = source.DeepCopyTo<List<Cow>>();
-
-			Assert.AreNotEqual(source, destination);
-			Assert.AreEqual(1, destination.Count);
-			Assert.AreNotEqual(source[0], destination[0]);
-
-			ScenarioHelper.Assert_Cow(source[0], destination[0]);
-		}
-
-
 		#region Array -> Array - Primitive types
 
 		[TestMethod]
@@ -132,13 +96,144 @@ namespace Runtime.Mapper.Tests
 
 		#region Array -> List - Primitive types
 
+		[TestMethod]
+		public void DeepCopyTo_SourceOfGuidArrayToDestinationOfGuidList_DestinationCopied()
+		{
+			Guid[] source = new Guid[] { Constants.Guid.value1, Constants.Guid.value2, Constants.Guid.value3 };
+
+			List<Guid> destination = source.DeepCopyTo<List<Guid>>();
+
+			Assert.AreNotEqual(source, destination);
+
+			Assert.AreEqual(Constants.Guid.value1, destination[0]);
+			Assert.AreEqual(Constants.Guid.value2, destination[1]);
+			Assert.AreEqual(Constants.Guid.value3, destination[2]);
+		}
+
+		[TestMethod]
+		public void DeepCopyTo_SourceOfIntArrayToDestinationOfIntList_DestinationCopied()
+		{
+			int[] source = new int[] { Constants.Int.value1, Constants.Int.value2 };
+
+			List<int> destination = source.DeepCopyTo<List<int>>();
+
+			Assert.AreNotEqual(source, destination);
+
+			Assert.AreEqual(Constants.Int.value1, destination[0]);
+			Assert.AreEqual(Constants.Int.value2, destination[1]);
+		}
+
 		#endregion
 
 		#region List -> Array - Primitive types
 
+		[TestMethod]
+		public void DeepCopyTo_SourceOfGuidListToDestinationOfGuidArray_DestinationCopied()
+		{
+			List<Guid> source = new List<Guid> { Constants.Guid.value1, Constants.Guid.value2, Constants.Guid.value3 };
+
+			Guid[] destination = source.DeepCopyTo<Guid[]>();
+
+			Assert.AreNotEqual(source, destination);
+
+			Assert.AreEqual(Constants.Guid.value1, destination[0]);
+			Assert.AreEqual(Constants.Guid.value2, destination[1]);
+			Assert.AreEqual(Constants.Guid.value3, destination[2]);
+		}
+
+		[TestMethod]
+		public void DeepCopyTo_SourceOfIntListToDestinationOfIntArray_DestinationCopied()
+		{
+			List<int> source = new List<int> { Constants.Int.value1, Constants.Int.value2 };
+
+			int[] destination = source.DeepCopyTo<int[]>();
+
+			Assert.AreNotEqual(source, destination);
+
+			Assert.AreEqual(Constants.Int.value1, destination[0]);
+			Assert.AreEqual(Constants.Int.value2, destination[1]);
+		}
+
 		#endregion
 
 
+		#region Array -> Array - Custom Types
+
+		[TestMethod]
+		public void DeepCopyTo_ArrayToArrayOfSameType_DestinationCopied()
+		{
+			Cow[] source = new Cow[1]
+			{
+				 ScenarioHelper.Create_Cow()
+			};
+
+			Cow[] destination = source.DeepCopyTo<Cow[]>();
+
+			Assert.AreNotEqual(source, destination);
+			Assert.AreEqual(1, destination.Length);
+			Assert.AreNotEqual(source[0], destination[0]);
+
+			ScenarioHelper.Assert_Cow(source[0], destination[0]);
+		}
+
+		[TestMethod]
+		public void DeepCopyTo_ArrayToArrayOfDifferentType_DestinationCopied()
+		{
+			Cow[] source = new Cow[1]
+			{
+				 ScenarioHelper.Create_Cow()
+			};
+
+			Mule[] destination = source.DeepCopyTo<Mule[]>();
+
+			Assert.AreNotEqual(source, destination);
+			Assert.AreEqual(1, destination.Length);
+			Assert.AreNotEqual(source[0], destination[0]);
+
+			ScenarioHelper.Assert_Mule(source[0], destination[0]);
+		}
+
+		#endregion
+
+		#region List -> List - Custom Types
+
+		[TestMethod]
+		public void DeepCopyTo_ListToListOfSameType_DestinationCopied()
+		{
+			List<Cow> source = new List<Cow>
+			{
+				 ScenarioHelper.Create_Cow()
+			};
+
+			List<Cow> destination = source.DeepCopyTo<List<Cow>>();
+
+			Assert.AreNotEqual(source, destination);
+			Assert.AreEqual(1, destination.Count);
+			Assert.AreNotEqual(source[0], destination[0]);
+
+			ScenarioHelper.Assert_Cow(source[0], destination[0]);
+		}
+
+		[TestMethod]
+		public void DeepCopyTo_ListToListOfDifferentType_DestinationCopied()
+		{
+			List<Cow> source = new List<Cow>
+			{
+				 ScenarioHelper.Create_Cow()
+			};
+
+			List<Mule> destination = source.DeepCopyTo<List<Mule>>();
+
+			Assert.AreNotEqual(source, destination);
+			Assert.AreEqual(1, destination.Count);
+			Assert.AreNotEqual(source[0], destination[0]);
+
+			ScenarioHelper.Assert_Mule(source[0], destination[0]);
+		}
+
+		#endregion
+
+		#region Array - List - Custom Types
 
 		[TestMethod]
 		public void DeepCopyTo_ArrayToListOfSameType_DestinationCopied()
@@ -174,6 +269,10 @@ namespace Runtime.Mapper.Tests
 			ScenarioHelper.Assert_Mule(source[0], destination[0]);
 		}
 
+		#endregion
+
+		#region List - Array - Custom Types
+
 		[TestMethod]
 		public void DeepCopyTo_ListToArrayOfSameType_DestinationCopied()
 		{
@@ -208,6 +307,7 @@ namespace Runtime.Mapper.Tests
 			ScenarioHelper.Assert_Mule(source[0], destination[0]);
 		}
 
+		#endregion
 
 
 		#region Aggregate types
