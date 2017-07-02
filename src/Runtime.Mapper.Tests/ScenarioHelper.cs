@@ -29,7 +29,12 @@ namespace Runtime.Mapper.Tests
                 IntDefault = default(int),
                 StringDefault = default(string),
 
-                //Dictionary = new Dictionary<Guid, string>() { { Constants.Guid.value3, "value1" } },
+                DictionaryGuidInt = new Dictionary<Guid, int>() { { Constants.Guid.value3, Constants.Int.value1 } },
+                DictionaryGuidDecimal = new Dictionary<Guid, decimal>() { { Constants.Guid.value3, Constants.Decimal.value1 } },
+                DictionaryGuidString = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } },
+                DictionaryGuidDateTime = new Dictionary<Guid, DateTime>() { { Constants.Guid.value3, Constants.DateTime.value1 } },
+                DictionaryGuidGuid = new Dictionary<Guid, Guid>() { { Constants.Guid.value3, Constants.Guid.value1 } },
+                DictionaryGuidBool = new Dictionary<Guid, bool>() { { Constants.Guid.value3, Constants.Bool.value1 } },
 
                 // Nullable primitives - Value
                 BoolNullable = Constants.Bool.value1,
@@ -92,7 +97,24 @@ namespace Runtime.Mapper.Tests
             Assert.AreEqual(0, destination.IntDefault);
             Assert.AreEqual(null, destination.StringDefault);
 
-            //Assert.AreEqual("value1", baseClass.Dictionary[Constants.Guid.value3]);
+            // Dictionary
+            Assert.AreNotEqual(source.DictionaryGuidInt, destination.DictionaryGuidInt);
+            Assert.AreEqual(Constants.Int.value1, destination.DictionaryGuidInt[Constants.Guid.value3]);
+
+            Assert.AreNotEqual(source.DictionaryGuidDecimal, destination.DictionaryGuidDecimal);
+            Assert.AreEqual(Constants.Decimal.value1, destination.DictionaryGuidDecimal[Constants.Guid.value3]);
+
+            Assert.AreNotEqual(source.DictionaryGuidString, destination.DictionaryGuidString);
+            Assert.AreEqual(Constants.String.value1, destination.DictionaryGuidString[Constants.Guid.value3]);
+
+            Assert.AreNotEqual(source.DictionaryGuidDateTime, destination.DictionaryGuidDateTime);
+            Assert.AreEqual(Constants.DateTime.value1, destination.DictionaryGuidDateTime[Constants.Guid.value3]);
+
+            Assert.AreNotEqual(source.DictionaryGuidGuid, destination.DictionaryGuidGuid);
+            Assert.AreEqual(Constants.Guid.value1, destination.DictionaryGuidGuid[Constants.Guid.value3]);
+
+            Assert.AreNotEqual(source.DictionaryGuidBool, destination.DictionaryGuidBool);
+            Assert.AreEqual(Constants.Bool.value1, destination.DictionaryGuidBool[Constants.Guid.value3]);
 
             // Nullable primitives - Value
             Assert.AreEqual(Constants.Bool.value1, destination.BoolNullable);

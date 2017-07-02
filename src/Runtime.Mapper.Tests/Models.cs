@@ -37,7 +37,21 @@ namespace Runtime.Mapper.Tests
 
         #endregion
 
-        //public Dictionary<Guid, string> Dictionary { get; set; }
+        #region Dictionary
+
+        public Dictionary<Guid, int> DictionaryGuidInt { get; set; }
+
+        public Dictionary<Guid, decimal> DictionaryGuidDecimal { get; set; }
+
+        public Dictionary<Guid, string> DictionaryGuidString { get; set; }
+
+        public Dictionary<Guid, DateTime> DictionaryGuidDateTime { get; set; }
+
+        public Dictionary<Guid, Guid> DictionaryGuidGuid { get; set; }
+
+        public Dictionary<Guid, bool> DictionaryGuidBool { get; set; }
+
+        #endregion
 
         #region Nullable primitives - Value
 

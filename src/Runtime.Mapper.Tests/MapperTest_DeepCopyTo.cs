@@ -324,6 +324,10 @@ namespace Runtime.Mapper.Tests
 
             Dictionary<Guid, string> destination = source.DeepCopyTo<Dictionary<Guid, string>>();
 
+            source[new Guid("35B5042A-24B9-4308-91CA-806FDEFFCE20")] = "value11";
+            source[new Guid("59236B13-AFBC-4C87-94DD-F0010A2319C1")] = "value21";
+            source[new Guid("ADF639AB-4AB4-48BC-BAC0-E25DC9915F08")] = "value31";
+
             Assert.AreEqual("value1", destination[new Guid("35B5042A-24B9-4308-91CA-806FDEFFCE20")]);
             Assert.AreEqual("value2", destination[new Guid("59236B13-AFBC-4C87-94DD-F0010A2319C1")]);
             Assert.AreEqual("value3", destination[new Guid("ADF639AB-4AB4-48BC-BAC0-E25DC9915F08")]);
