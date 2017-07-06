@@ -98,7 +98,11 @@ namespace Runtime.Mapper
                     sourceAccessor = Expression.MakeIndex(sourceVar, sourceType.GetProperty("Item"), new Expression[] { index });
                 }
 
-                if (!primitiveTypes.Contains(destinationUnderlyingType))
+                if (destinationUnderlyingType.IsEnum || (destinationUnderlyingType.IsGenericType && destinationUnderlyingType.GetGenericTypeDefinition() == typeof(Nullable<>) && destinationUnderlyingType.GetGenericArguments()[0].IsEnum))
+                {
+                    sourceAccessor = Expression.Convert(sourceAccessor, destinationUnderlyingType);
+                }
+                else if (!primitiveTypes.Contains(destinationUnderlyingType))
                 {
                     MethodInfo miDeepCopyTo = typeof(Mapper).GetMethod("DeepCopyTo", BindingFlags.Static | BindingFlags.Public).MakeGenericMethod(destinationUnderlyingType);
 
@@ -207,6 +211,10 @@ namespace Runtime.Mapper
                 // map primitive type => this should not be the case for now :)
 
                 expressions.Add(Expression.Assign(destinationVar, sourceVar));
+            }
+            else if (sourceType.IsEnum || (sourceType.IsGenericType && sourceType.GetGenericTypeDefinition() == typeof(Nullable<>) && sourceType.GetGenericArguments()[0].IsEnum))
+            {
+                expressions.Add(Expression.Assign(destinationVar, Expression.Convert(sourceVar, destinationType)));
             }
             else
             {

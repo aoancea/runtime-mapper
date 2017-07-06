@@ -310,6 +310,138 @@ namespace Runtime.Mapper.Tests
         #endregion
 
 
+
+
+        #region Array -> Array - Enum types
+
+        [TestMethod]
+        public void DeepCopyTo_SourceOfEnumArrayToDestinationOfEnumArray_DestinationCopied()
+        {
+            Type[] source = new Type[] { Type.One, Type.Two, Type.Three };
+
+            Type[] destination = source.DeepCopyTo<Type[]>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(Type.One, destination[0]);
+            Assert.AreEqual(Type.Two, destination[1]);
+            Assert.AreEqual(Type.Three, destination[2]);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_SourceOfEnumArrayToDestinationOfEnumArray_DifferentDestinationType_DestinationCopied()
+        {
+            A_Type[] source = new A_Type[] { A_Type.One, A_Type.Two, A_Type.Three };
+
+            B_Type[] destination = source.DeepCopyTo<B_Type[]>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(B_Type.One, destination[0]);
+            Assert.AreEqual(B_Type.Two, destination[1]);
+            Assert.AreEqual(B_Type.Three, destination[2]);
+        }
+
+        #endregion
+
+        #region List -> List - Enum types
+
+        [TestMethod]
+        public void DeepCopyTo_SourceOfEnumListToDestinationOfEnumList_DestinationCopied()
+        {
+            List<Type> source = new List<Type> { Type.One, Type.Two, Type.Three };
+
+            List<Type> destination = source.DeepCopyTo<List<Type>>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(Type.One, destination[0]);
+            Assert.AreEqual(Type.Two, destination[1]);
+            Assert.AreEqual(Type.Three, destination[2]);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_SourceOfEnumListToDestinationOfEnumList_DifferentDestinationType_DestinationCopied()
+        {
+            List<A_Type> source = new List<A_Type> { A_Type.One, A_Type.Two, A_Type.Three };
+
+            List<B_Type> destination = source.DeepCopyTo<List<B_Type>>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(B_Type.One, destination[0]);
+            Assert.AreEqual(B_Type.Two, destination[1]);
+            Assert.AreEqual(B_Type.Three, destination[2]);
+        }
+
+        #endregion
+
+        #region Array -> List - Enum types
+
+        [TestMethod]
+        public void DeepCopyTo_SourceOfEnumArrayToDestinationOfEnumList_DestinationCopied()
+        {
+            Type[] source = new Type[] { Type.One, Type.Two, Type.Three };
+
+            List<Type> destination = source.DeepCopyTo<List<Type>>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(Type.One, destination[0]);
+            Assert.AreEqual(Type.Two, destination[1]);
+            Assert.AreEqual(Type.Three, destination[2]);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_SourceOfEnumArrayToDestinationOfEnumList_DifferentDestinationType_DestinationCopied()
+        {
+            A_Type[] source = new A_Type[] { A_Type.One, A_Type.Two, A_Type.Three };
+
+            List<B_Type> destination = source.DeepCopyTo<List<B_Type>>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(B_Type.One, destination[0]);
+            Assert.AreEqual(B_Type.Two, destination[1]);
+            Assert.AreEqual(B_Type.Three, destination[2]);
+        }
+
+        #endregion
+
+        #region List -> Array - Enum types
+
+        [TestMethod]
+        public void DeepCopyTo_SourceOfEnumListToDestinationOfEnumArray_DestinationCopied()
+        {
+            List<Type> source = new List<Type> { Type.One, Type.Two, Type.Three };
+
+            Type[] destination = source.DeepCopyTo<Type[]>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(Type.One, destination[0]);
+            Assert.AreEqual(Type.Two, destination[1]);
+            Assert.AreEqual(Type.Three, destination[2]);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_SourceOfEnumListToDestinationOfEnumArray_DifferentDestinationType_DestinationCopied()
+        {
+            List<A_Type> source = new List<A_Type> { A_Type.One, A_Type.Two, A_Type.Three };
+
+            B_Type[] destination = source.DeepCopyTo<B_Type[]>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(B_Type.One, destination[0]);
+            Assert.AreEqual(B_Type.Two, destination[1]);
+            Assert.AreEqual(B_Type.Three, destination[2]);
+        }
+
+        #endregion
+
+
+
         #region Dictionary
 
         [TestMethod]

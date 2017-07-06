@@ -37,6 +37,18 @@ namespace Runtime.Mapper.Tests
 
         #endregion
 
+        #region Enums - Value
+
+        public Type Enum { get; set; }
+
+        public Type EnumDefault { get; set; }
+
+        public Type? EnumNullable { get; set; }
+
+        public Type? EnumNullableDefault { get; set; }
+
+        #endregion
+
         #region Dictionary
 
         public Dictionary<Guid, int> DictionaryGuidInt { get; set; }
@@ -120,6 +132,13 @@ namespace Runtime.Mapper.Tests
 
     }
 
+    public enum Type
+    {
+        One = 0,
+        Two = 1,
+        Three = 2
+    }
+
     #region A
     internal class A_BigClass : BaseClass
     {
@@ -165,6 +184,13 @@ namespace Runtime.Mapper.Tests
     internal class A_CircularReference : BaseClass
     {
         public A_CircularReference CircularReferenceProperty { get; set; }
+    }
+
+    internal enum A_Type
+    {
+        One = 0,
+        Two = 1,
+        Three = 2
     }
     #endregion
 
@@ -213,6 +239,13 @@ namespace Runtime.Mapper.Tests
     internal class B_CircularReference : BaseClass
     {
         public B_CircularReference CircularReferenceProperty { get; set; }
+    }
+
+    internal enum B_Type
+    {
+        One = 0,
+        Two = 1,
+        Three = 2
     }
     #endregion
 }
