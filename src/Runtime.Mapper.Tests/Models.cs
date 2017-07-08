@@ -120,6 +120,18 @@ namespace Runtime.Mapper.Tests
 
         public List<bool> BoolList { get; set; }
         #endregion
+
+        #region Objects
+        public object Object1 { get; set; }
+
+        public object Object2 { get; set; }
+
+        public object Object3 { get; set; }
+
+        public object[] ObjectArray { get; set; }
+
+        public List<object> ObjectList { get; set; }
+        #endregion
     }
 
     internal class Cow : BaseClass

@@ -32,6 +32,8 @@ namespace Runtime.Mapper.Tests
         }
 
 
+        #region Collections
+
         #region Array -> Array - Primitive types
 
         [TestMethod]
@@ -310,8 +312,6 @@ namespace Runtime.Mapper.Tests
         #endregion
 
 
-
-
         #region Array -> Array - Enum types
 
         [TestMethod]
@@ -441,6 +441,85 @@ namespace Runtime.Mapper.Tests
         #endregion
 
 
+        #region Array -> Array - Objects
+
+        [TestMethod]
+        public void DeepCopyTo_SourceOfObjectArrayToDestinationOfObjectArray_DestinationCopied()
+        {
+            object[] source = new object[] { Constants.String.value1, Constants.DateTime.value2, Constants.Bool.value2, ScenarioHelper.CreateA_BigClass(), Enumeration.Two };
+
+            object[] destination = source.DeepCopyTo<object[]>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(Constants.String.value1, destination[0]);
+            Assert.AreEqual(Constants.DateTime.value2, destination[1]);
+            Assert.AreEqual(Constants.Bool.value2, destination[2]);
+            ScenarioHelper.Assert_A_BigClass((A_BigClass)source[3], (A_BigClass)destination[3]);
+            Assert.AreEqual(Enumeration.Two, destination[4]);
+        }
+
+        #endregion
+
+        #region List -> List - Objects
+
+        [TestMethod]
+        public void DeepCopyTo_SourceOfObjectListToDestinationOfObjectList_DestinationCopied()
+        {
+            List<object> source = new List<object> { Constants.String.value1, Constants.DateTime.value2, Constants.Bool.value2, ScenarioHelper.CreateA_BigClass(), Enumeration.Two };
+
+            List<object> destination = source.DeepCopyTo<List<object>>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(Constants.String.value1, destination[0]);
+            Assert.AreEqual(Constants.DateTime.value2, destination[1]);
+            Assert.AreEqual(Constants.Bool.value2, destination[2]);
+            ScenarioHelper.Assert_A_BigClass((A_BigClass)source[3], (A_BigClass)destination[3]);
+            Assert.AreEqual(Enumeration.Two, destination[4]);
+        }
+
+        #endregion
+
+        #region Array -> List - Objects
+
+        [TestMethod]
+        public void DeepCopyTo_SourceOfObjectArrayToDestinationOfObjectList_DestinationCopied()
+        {
+            object[] source = new object[] { Constants.String.value1, Constants.DateTime.value2, Constants.Bool.value2, ScenarioHelper.CreateA_BigClass(), Enumeration.Two };
+
+            List<object> destination = source.DeepCopyTo<List<object>>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(Constants.String.value1, destination[0]);
+            Assert.AreEqual(Constants.DateTime.value2, destination[1]);
+            Assert.AreEqual(Constants.Bool.value2, destination[2]);
+            ScenarioHelper.Assert_A_BigClass((A_BigClass)source[3], (A_BigClass)destination[3]);
+            Assert.AreEqual(Enumeration.Two, destination[4]);
+        }
+
+        #endregion
+
+        #region List -> Array - Objects
+
+        [TestMethod]
+        public void DeepCopyTo_SourceOfObjectListToDestinationOfObjectArray_DestinationCopied()
+        {
+            List<object> source = new List<object> { Constants.String.value1, Constants.DateTime.value2, Constants.Bool.value2, ScenarioHelper.CreateA_BigClass(), Enumeration.Two };
+
+            object[] destination = source.DeepCopyTo<object[]>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(Constants.String.value1, destination[0]);
+            Assert.AreEqual(Constants.DateTime.value2, destination[1]);
+            Assert.AreEqual(Constants.Bool.value2, destination[2]);
+            ScenarioHelper.Assert_A_BigClass((A_BigClass)source[3], (A_BigClass)destination[3]);
+            Assert.AreEqual(Enumeration.Two, destination[4]);
+        }
+
+        #endregion
 
         #region Dictionary
 
@@ -489,6 +568,8 @@ namespace Runtime.Mapper.Tests
             ScenarioHelper.Assert_Cow(source[new Guid("59236B13-AFBC-4C87-94DD-F0010A2319C1")], destinationItem2);
             ScenarioHelper.Assert_Cow(source[new Guid("ADF639AB-4AB4-48BC-BAC0-E25DC9915F08")], destinationItem3);
         }
+
+        #endregion
 
         #endregion
 

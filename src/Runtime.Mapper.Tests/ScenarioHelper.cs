@@ -71,7 +71,14 @@ namespace Runtime.Mapper.Tests
                 DecimalList = new List<decimal>() { Constants.Decimal.value1, Constants.Decimal.value2 },
                 GuidList = new List<Guid>() { Constants.Guid.value1, Constants.Guid.value2 },
                 IntList = new List<int>() { Constants.Int.value1, Constants.Int.value2 },
-                StringList = new List<string>() { Constants.String.value1, Constants.String.value2 }
+                StringList = new List<string>() { Constants.String.value1, Constants.String.value2 },
+
+                // Objects
+                Object1 = Constants.String.value1,
+                Object2 = Enumeration.Two,
+                Object3 = CreateA_BigClass(),
+                ObjectArray = new object[5] { Constants.String.value1, Constants.DateTime.value2, Constants.Bool.value2, CreateA_BigClass(), Enumeration.Two },
+                ObjectList = new List<object>() { Enumeration.Two, Constants.DateTime.value2, Constants.Bool.value2, Constants.String.value1, CreateA_BigClass() }
             };
         }
 
@@ -193,6 +200,160 @@ namespace Runtime.Mapper.Tests
             Assert.AreNotEqual(source.StringList, destination.StringList);
             Assert.AreEqual(Constants.String.value1, destination.StringList[0]);
             Assert.AreEqual(Constants.String.value2, destination.StringList[1]);
+
+
+            // Objects
+
+
+            Assert.AreEqual(Constants.String.value1, destination.Object1);
+            Assert.AreEqual(Enumeration.Two, destination.Object2);
+
+            Assert_A_BigClass((A_BigClass)source.Object3, (A_BigClass)destination.Object3);
+
+            Assert.AreNotEqual(source.ObjectArray, destination.ObjectArray);
+            Assert.AreEqual(Constants.String.value1, destination.ObjectArray[0]);
+            Assert.AreEqual(Constants.DateTime.value2, destination.ObjectArray[1]);
+            Assert.AreEqual(Constants.Bool.value2, destination.ObjectArray[2]);
+            Assert_A_BigClass((A_BigClass)source.ObjectArray[3], (A_BigClass)destination.ObjectArray[3]);
+            Assert.AreEqual(Enumeration.Two, destination.ObjectArray[4]);
+
+            Assert.AreNotEqual(source.ObjectList, destination.ObjectList);
+            Assert.AreEqual(Enumeration.Two, destination.ObjectList[0]);
+            Assert.AreEqual(Constants.DateTime.value2, destination.ObjectList[1]);
+            Assert.AreEqual(Constants.Bool.value2, destination.ObjectList[2]);
+            Assert.AreEqual(Constants.String.value1, destination.ObjectList[3]);
+            Assert_A_BigClass((A_BigClass)source.ObjectList[4], (A_BigClass)destination.ObjectList[4]);
+        }
+
+        public static A_BigClass CreateA_BigClass()
+        {
+            return new A_BigClass()
+            {
+                Bool = true,
+                DateTime = new DateTime(2011, 01, 02),
+                Decimal = 14.10M,
+                Guid = new Guid("8DA4C611-A758-4EB7-A352-8D12FE84DBD9"),
+                Int = 4141,
+                String = "1142",
+
+                FirstClass = new A_FirstClass()
+                {
+                    Bool = true,
+                    DateTime = new DateTime(2012, 01, 02),
+                    Decimal = 66.10M,
+                    Guid = new Guid("8D24C611-A758-4EB7-A352-8D82FE84DBD9"),
+                    Int = 54,
+                    String = "8567",
+
+                    FirstClassFirstSubClass = new A_FirstClassFirstSubClass()
+                    {
+                        Bool = true,
+                        DateTime = new DateTime(2013, 01, 02),
+                        Decimal = 324.10M,
+                        Guid = new Guid("8DA43611-A758-4EB7-A352-8D82FE84DBD9"),
+                        Int = 7345,
+                        String = "834"
+                    },
+                    FirstClassSecondSubClass = new A_FirstClassSecondSubClass()
+                    {
+                        Bool = true,
+                        DateTime = new DateTime(2014, 01, 02),
+                        Decimal = 523.10M,
+                        Guid = new Guid("8DA4C611-A758-4EB7-A352-8482FE84DBD9"),
+                        Int = 235,
+                        String = "978"
+                    }
+                },
+
+                SecondClass = new A_SecondClass()
+                {
+                    Bool = true,
+                    DateTime = new DateTime(2015, 01, 02),
+                    Decimal = 78.10M,
+                    Guid = new Guid("8DA4C611-3758-4EB7-A352-8D82FE84DBD9"),
+                    Int = 2346,
+                    String = "5",
+
+                    SecondClassFirstSubClass = new A_SecondClassFirstSubClass()
+                    {
+                        Bool = true,
+                        DateTime = new DateTime(2016, 01, 02),
+                        Decimal = 32.10M,
+                        Guid = new Guid("8DA41611-A758-4EB7-A352-8D82FE84DBD9"),
+                        Int = 8,
+                        String = "7089"
+                    },
+                    SecondClassSecondSubClass = new A_SecondClassSecondSubClass()
+                    {
+                        Bool = true,
+                        DateTime = new DateTime(2017, 01, 02),
+                        Decimal = 56.10M,
+                        Guid = new Guid("8DA44611-A758-4EB7-A352-8D82FE844BD9"),
+                        Int = 5,
+                        String = "887"
+                    }
+                }
+            };
+        }
+
+        public static void Assert_A_BigClass(A_BigClass source, A_BigClass destination)
+        {
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(true, destination.Bool);
+            Assert.AreEqual(new DateTime(2011, 01, 02), destination.DateTime);
+            Assert.AreEqual(14.10M, destination.Decimal);
+            Assert.AreEqual(new Guid("8DA4C611-A758-4EB7-A352-8D12FE84DBD9"), destination.Guid);
+            Assert.AreEqual(4141, destination.Int);
+            Assert.AreEqual("1142", destination.String);
+
+            Assert.AreNotEqual(source.FirstClass, destination.FirstClass);
+            Assert.AreEqual(true, destination.FirstClass.Bool);
+            Assert.AreEqual(new DateTime(2012, 01, 02), destination.FirstClass.DateTime);
+            Assert.AreEqual(66.10M, destination.FirstClass.Decimal);
+            Assert.AreEqual(new Guid("8D24C611-A758-4EB7-A352-8D82FE84DBD9"), destination.FirstClass.Guid);
+            Assert.AreEqual(54, destination.FirstClass.Int);
+            Assert.AreEqual("8567", destination.FirstClass.String);
+
+            Assert.AreNotEqual(source.FirstClass.FirstClassFirstSubClass, destination.FirstClass.FirstClassFirstSubClass);
+            Assert.AreEqual(true, destination.FirstClass.FirstClassFirstSubClass.Bool);
+            Assert.AreEqual(new DateTime(2013, 01, 02), destination.FirstClass.FirstClassFirstSubClass.DateTime);
+            Assert.AreEqual(324.10M, destination.FirstClass.FirstClassFirstSubClass.Decimal);
+            Assert.AreEqual(new Guid("8DA43611-A758-4EB7-A352-8D82FE84DBD9"), destination.FirstClass.FirstClassFirstSubClass.Guid);
+            Assert.AreEqual(7345, destination.FirstClass.FirstClassFirstSubClass.Int);
+            Assert.AreEqual("834", destination.FirstClass.FirstClassFirstSubClass.String);
+
+            Assert.AreNotEqual(source.FirstClass.FirstClassSecondSubClass, destination.FirstClass.FirstClassSecondSubClass);
+            Assert.AreEqual(true, destination.FirstClass.FirstClassSecondSubClass.Bool);
+            Assert.AreEqual(new DateTime(2014, 01, 02), destination.FirstClass.FirstClassSecondSubClass.DateTime);
+            Assert.AreEqual(523.10M, destination.FirstClass.FirstClassSecondSubClass.Decimal);
+            Assert.AreEqual(new Guid("8DA4C611-A758-4EB7-A352-8482FE84DBD9"), destination.FirstClass.FirstClassSecondSubClass.Guid);
+            Assert.AreEqual(235, destination.FirstClass.FirstClassSecondSubClass.Int);
+            Assert.AreEqual("978", destination.FirstClass.FirstClassSecondSubClass.String);
+
+            Assert.AreNotEqual(source.SecondClass, destination.SecondClass);
+            Assert.AreEqual(true, destination.SecondClass.Bool);
+            Assert.AreEqual(new DateTime(2015, 01, 02), destination.SecondClass.DateTime);
+            Assert.AreEqual(78.10M, destination.SecondClass.Decimal);
+            Assert.AreEqual(new Guid("8DA4C611-3758-4EB7-A352-8D82FE84DBD9"), destination.SecondClass.Guid);
+            Assert.AreEqual(2346, destination.SecondClass.Int);
+            Assert.AreEqual("5", destination.SecondClass.String);
+
+            Assert.AreNotEqual(source.SecondClass.SecondClassFirstSubClass, destination.SecondClass.SecondClassFirstSubClass);
+            Assert.AreEqual(true, destination.SecondClass.SecondClassFirstSubClass.Bool);
+            Assert.AreEqual(new DateTime(2016, 01, 02), destination.SecondClass.SecondClassFirstSubClass.DateTime);
+            Assert.AreEqual(32.10M, destination.SecondClass.SecondClassFirstSubClass.Decimal);
+            Assert.AreEqual(new Guid("8DA41611-A758-4EB7-A352-8D82FE84DBD9"), destination.SecondClass.SecondClassFirstSubClass.Guid);
+            Assert.AreEqual(8, destination.SecondClass.SecondClassFirstSubClass.Int);
+            Assert.AreEqual("7089", destination.SecondClass.SecondClassFirstSubClass.String);
+
+            Assert.AreNotEqual(source.SecondClass.SecondClassSecondSubClass, destination.SecondClass.SecondClassSecondSubClass);
+            Assert.AreEqual(true, destination.SecondClass.SecondClassSecondSubClass.Bool);
+            Assert.AreEqual(new DateTime(2017, 01, 02), destination.SecondClass.SecondClassSecondSubClass.DateTime);
+            Assert.AreEqual(56.10M, destination.SecondClass.SecondClassSecondSubClass.Decimal);
+            Assert.AreEqual(new Guid("8DA44611-A758-4EB7-A352-8D82FE844BD9"), destination.SecondClass.SecondClassSecondSubClass.Guid);
+            Assert.AreEqual(5, destination.SecondClass.SecondClassSecondSubClass.Int);
+            Assert.AreEqual("887", destination.SecondClass.SecondClassSecondSubClass.String);
         }
     }
 }

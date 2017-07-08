@@ -48,6 +48,9 @@ namespace Runtime.Mapper
 
         private static Func<object, object, object> GetMappingFunction(Type sourceType, Type destinationType)
         {
+            if (destinationType == typeof(object) && sourceType != destinationType)
+                destinationType = sourceType;
+
             ParameterExpression sourceParam = Expression.Parameter(typeof(object), "sourceObj");
             ParameterExpression destinationParam = Expression.Parameter(typeof(object), "destinationObj");
 
@@ -57,11 +60,16 @@ namespace Runtime.Mapper
             ParameterExpression destinationVar = Expression.Variable(destinationType, "destination");
 
             expressions.Add(Expression.Assign(sourceVar, Expression.Convert(sourceParam, sourceType)));
-            expressions.Add(Expression.Assign(destinationVar, Expression.Convert(Expression.Constant(null), destinationType)));
+
+            if (!destinationType.IsValueType)
+                expressions.Add(Expression.Assign(destinationVar, Expression.Convert(Expression.Constant(null), destinationType)));
 
             expressions.AddRange(MapObjectExpression(sourceType, destinationType, sourceVar, destinationVar, destinationParam, false));
 
-            expressions.Add(destinationVar);
+            if (destinationType.IsValueType)
+                expressions.Add(Expression.Convert(destinationVar, typeof(object)));
+            else
+                expressions.Add(destinationVar);
 
             LambdaExpression mappingFunctionLambda = Expression.Lambda(Expression.Block(new ParameterExpression[] { sourceVar, destinationVar }, expressions), new ParameterExpression[] { sourceParam, destinationParam });
 
@@ -210,7 +218,10 @@ namespace Runtime.Mapper
             {
                 // map primitive type => this should not be the case for now :)
 
-                expressions.Add(Expression.Assign(destinationVar, sourceVar));
+                if (sourceType == destinationType)
+                    expressions.Add(Expression.Assign(destinationVar, sourceVar));
+                else
+                    expressions.Add(Expression.Assign(destinationVar, Expression.Convert(sourceVar, destinationType)));
             }
             else if (sourceType.IsEnum || (sourceType.IsGenericType && sourceType.GetGenericTypeDefinition() == typeof(Nullable<>) && sourceType.GetGenericArguments()[0].IsEnum))
             {
