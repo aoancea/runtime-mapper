@@ -39,13 +39,13 @@ namespace Runtime.Mapper.Tests
 
         #region Enums - Value
 
-        public Type Enum { get; set; }
+        public Enumeration Enum { get; set; }
 
-        public Type EnumDefault { get; set; }
+        public Enumeration EnumDefault { get; set; }
 
-        public Type? EnumNullable { get; set; }
+        public Enumeration? EnumNullable { get; set; }
 
-        public Type? EnumNullableDefault { get; set; }
+        public Enumeration? EnumNullableDefault { get; set; }
 
         #endregion
 
@@ -132,7 +132,7 @@ namespace Runtime.Mapper.Tests
 
     }
 
-    public enum Type
+    public enum Enumeration
     {
         One = 0,
         Two = 1,
@@ -186,7 +186,7 @@ namespace Runtime.Mapper.Tests
         public A_CircularReference CircularReferenceProperty { get; set; }
     }
 
-    internal enum A_Type
+    internal enum A_Enumeration
     {
         One = 0,
         Two = 1,
@@ -241,7 +241,7 @@ namespace Runtime.Mapper.Tests
         public B_CircularReference CircularReferenceProperty { get; set; }
     }
 
-    internal enum B_Type
+    internal enum B_Enumeration
     {
         One = 0,
         Two = 1,

@@ -30,10 +30,10 @@ namespace Runtime.Mapper.Tests
                 StringDefault = default(string),
 
                 //Enums - Value
-                Enum = Type.Three,
-                EnumDefault = default(Type),
-                EnumNullable = Type.Two,
-                //EnumNullableDefault = default(Type),
+                Enum = Enumeration.Three,
+                EnumDefault = default(Enumeration),
+                EnumNullable = Enumeration.Two,
+                //EnumNullableDefault = default(Enumeration),
 
                 // Dictionary
                 DictionaryGuidInt = new Dictionary<Guid, int>() { { Constants.Guid.value3, Constants.Int.value1 } },
@@ -105,10 +105,10 @@ namespace Runtime.Mapper.Tests
             Assert.AreEqual(null, destination.StringDefault);
 
             //Enums - Value
-            Assert.AreEqual(Type.Three, destination.Enum);
-            Assert.AreEqual(Type.One, destination.EnumDefault);
+            Assert.AreEqual(Enumeration.Three, destination.Enum);
+            Assert.AreEqual(Enumeration.One, destination.EnumDefault);
 
-            Assert.AreEqual(Type.Two, destination.EnumNullable);
+            Assert.AreEqual(Enumeration.Two, destination.EnumNullable);
             Assert.AreEqual(null, destination.EnumNullableDefault);
 
             // Dictionary
