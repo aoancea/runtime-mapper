@@ -59,7 +59,7 @@ namespace Runtime.Mapper
             expressions.Add(Expression.Assign(sourceVar, Expression.Convert(sourceParam, sourceType)));
             expressions.Add(Expression.Assign(destinationVar, Expression.Convert(Expression.Constant(null), destinationType)));
 
-            expressions.AddRange(MapObjectExpression(sourceType, destinationType, sourceVar, destinationVar, destinationParam, true));
+            expressions.AddRange(MapObjectExpression(sourceType, destinationType, sourceVar, destinationVar, destinationParam, false));
 
             expressions.Add(destinationVar);
 
@@ -222,18 +222,18 @@ namespace Runtime.Mapper
 
                 if (deepCopyCustomTypes)
                 {
+                    MethodInfo miDeepCopyTo = typeof(Mapper).GetMethod("DeepCopyTo", BindingFlags.Static | BindingFlags.Public).MakeGenericMethod(destinationType);
+
+                    expressions.Add(Expression.Assign(destinationVar, Expression.Call(miDeepCopyTo, sourceVar)));
+                }
+                else
+                {
                     Expression assignDestinationExpresion = Expression.IfThenElse(Expression.Equal(destinationParam, Expression.Constant(null)),
                         Expression.Assign(destinationVar, Expression.New(destinationType)),
                         Expression.Assign(destinationVar, Expression.Convert(destinationParam, destinationType)));
 
                     expressions.Add(assignDestinationExpresion);
                     expressions.AddRange(MapPropertiesExpression(sourceType, destinationType, sourceVar, destinationVar));
-                }
-                else
-                {
-                    MethodInfo miDeepCopyTo = typeof(Mapper).GetMethod("DeepCopyTo", BindingFlags.Static | BindingFlags.Public).MakeGenericMethod(destinationType);
-
-                    expressions.Add(Expression.Assign(destinationVar, Expression.Call(miDeepCopyTo, sourceVar)));
                 }
             }
 
@@ -258,7 +258,7 @@ namespace Runtime.Mapper
                 MemberExpression sourcePropertyAccessor = Expression.Property(sourceVar, property.Name);
                 MemberExpression destinationPropertyAccessor = Expression.Property(destinationVar, property.Name);
 
-                expressions.AddRange(MapObjectExpression(sourcePropType, destinationPropType, sourcePropertyAccessor, destinationPropertyAccessor, destinationPropertyAccessor, false));
+                expressions.AddRange(MapObjectExpression(sourcePropType, destinationPropType, sourcePropertyAccessor, destinationPropertyAccessor, destinationPropertyAccessor, true));
             }
 
             return expressions;
