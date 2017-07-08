@@ -68,7 +68,7 @@ namespace Runtime.Mapper
             return (Func<object, object, object>)mappingFunctionLambda.Compile();
         }
 
-        private static List<Expression> MapObjectExpression(Type sourceType, Type destinationType, Expression sourceVar, Expression destinationVar, Expression destinationParam, bool isRoot)
+        private static List<Expression> MapObjectExpression(Type sourceType, Type destinationType, Expression sourceVar, Expression destinationVar, Expression destinationParam, bool deepCopyCustomTypes)
         {
             List<Expression> expressions = new List<Expression>();
 
@@ -220,7 +220,7 @@ namespace Runtime.Mapper
             {
                 // map object's properties
 
-                if (isRoot)
+                if (deepCopyCustomTypes)
                 {
                     Expression assignDestinationExpresion = Expression.IfThenElse(Expression.Equal(destinationParam, Expression.Constant(null)),
                         Expression.Assign(destinationVar, Expression.New(destinationType)),
