@@ -204,6 +204,15 @@ namespace Runtime.Mapper.Tests
         Two = 1,
         Three = 2
     }
+
+    internal class A_ClassWithDictionary
+    {
+        public Dictionary<string, string> Prop1 { get; set; }
+
+        public Dictionary<Guid, string> Prop2 { get; set; }
+
+        public Dictionary<Guid, Cow> Prop3 { get; set; }
+    }
     #endregion
 
     #region B
@@ -259,5 +268,15 @@ namespace Runtime.Mapper.Tests
         Two = 1,
         Three = 2
     }
+
+    internal class B_ClassWithDictionary
+    {
+        public Dictionary<string, string> Prop1 { get; set; }
+
+        public Dictionary<Guid, string> Prop2 { get; set; }
+
+        public Dictionary<Guid, Mule> Prop3 { get; set; }
+    }
+
     #endregion
 }

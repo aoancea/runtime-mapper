@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 
 namespace Runtime.Mapper.Tests
 {
@@ -32,6 +33,37 @@ namespace Runtime.Mapper.Tests
             Assert.AreNotEqual(source, destination);
 
             ScenarioHelper.Assert_Mule(source, destination);
+        }
+
+
+
+        [TestMethod]
+        public void DeepCopyTo_ClassWithDictionaryMapsToClassWithDictionaryOfDifferentCustomType_DestinationCopied()
+        {
+            A_ClassWithDictionary source = new A_ClassWithDictionary()
+            {
+                Prop1 = new Dictionary<string, string>() { { "key1", "value1" }, { "key2", "value2" } },
+                Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value1, "value3" }, { Constants.Guid.value3, "value4" } },
+                Prop3 = new Dictionary<Guid, Cow>() { { Constants.Guid.value2, ScenarioHelper.Create_Cow() } }
+            };
+
+            B_ClassWithDictionary destination = new B_ClassWithDictionary();
+
+            Mapper.Map(source, destination);
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(2, destination.Prop1.Keys.Count);
+            Assert.AreEqual("value1", destination.Prop1["key1"]);
+            Assert.AreEqual("value2", destination.Prop1["key2"]);
+
+            Assert.AreEqual(2, destination.Prop2.Keys.Count);
+            Assert.AreEqual("value3", destination.Prop2[Constants.Guid.value1]);
+            Assert.AreEqual("value4", destination.Prop2[Constants.Guid.value3]);
+
+            Assert.AreEqual(1, destination.Prop3.Keys.Count);
+            Assert.AreNotEqual(source.Prop3[Constants.Guid.value2], destination.Prop3[Constants.Guid.value2]);
+            ScenarioHelper.Assert_Mule(source.Prop3[Constants.Guid.value2], destination.Prop3[Constants.Guid.value2]);
         }
 
 

@@ -159,12 +159,15 @@ namespace Runtime.Mapper
             {
                 // map dictionary
 
+                Type sourceKeyUnderlyingType = sourceType.GetGenericArguments()[0];
+                Type sourceValueUnderlyingType = sourceType.GetGenericArguments()[1];
+
                 Type destinationKeyUnderlyingType = destinationType.GetGenericArguments()[0];
                 Type destinationValueUnderlyingType = destinationType.GetGenericArguments()[1];
 
                 Expression initDestination = Expression.Assign(destinationVar, Expression.New(typeof(Dictionary<,>).MakeGenericType(destinationKeyUnderlyingType, destinationValueUnderlyingType)));
 
-                Type elementType = typeof(KeyValuePair<,>).MakeGenericType(destinationKeyUnderlyingType, destinationValueUnderlyingType);
+                Type elementType = typeof(KeyValuePair<,>).MakeGenericType(sourceKeyUnderlyingType, sourceValueUnderlyingType);
                 Type enumerableType = typeof(IEnumerable<>).MakeGenericType(elementType);
                 Type enumeratorType = typeof(IEnumerator<>).MakeGenericType(elementType);
 
