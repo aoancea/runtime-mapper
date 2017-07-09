@@ -7,7 +7,7 @@ branches:
 
 test:
   assemblies:
-    - '**\*.UnitTesting.dll'
+    - '**\*.Tests.dll'
 
 before_build:
   - nuget restore src\Runtime.Mapper.sln
