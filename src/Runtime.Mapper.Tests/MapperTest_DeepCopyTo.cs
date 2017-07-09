@@ -32,6 +32,91 @@ namespace Runtime.Mapper.Tests
         }
 
 
+        #region Primitives
+
+        [TestMethod]
+        public void DeepCopyTo_Int_To_Int_DestinationCopied()
+        {
+            int source = 5;
+
+            int destination = source.DeepCopyTo<int>();
+
+            Assert.AreEqual(5, destination);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_Decimal_To_Decimal_DestinationCopied()
+        {
+            decimal source = 5M;
+
+            decimal destination = source.DeepCopyTo<decimal>();
+
+            Assert.AreEqual(5M, destination);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_String_To_String_DestinationCopied()
+        {
+            string source = "123";
+
+            string destination = source.DeepCopyTo<string>();
+
+            Assert.AreEqual("123", destination);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_Guid_To_Guid_DestinationCopied()
+        {
+            Guid source = Constants.Guid.value3;
+
+            Guid destination = source.DeepCopyTo<Guid>();
+
+            Assert.AreEqual(Constants.Guid.value3, destination);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_DateTime_To_DateTime_DestinationCopied()
+        {
+            DateTime source = new DateTime(2016, 01, 01);
+
+            DateTime destination = source.DeepCopyTo<DateTime>();
+
+            Assert.AreEqual(new DateTime(2016, 01, 01), destination);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_Bool_To_Bool_DestinationCopied()
+        {
+            bool source = true;
+
+            bool destination = source.DeepCopyTo<bool>();
+
+            Assert.AreEqual(true, destination);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_Char_To_Char_DestinationCopied()
+        {
+            char source = 'x';
+
+            char destination = source.DeepCopyTo<char>();
+
+            Assert.AreEqual('x', destination);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_Enum_To_Enum_DestinationCopied()
+        {
+            Enumeration source = Enumeration.Three;
+
+            Enumeration destination = source.DeepCopyTo<Enumeration>();
+
+            Assert.AreEqual(Enumeration.Three, destination);
+        }
+
+        #endregion
+
+
         #region Collections
 
         #region Array -> Array - Primitive types
