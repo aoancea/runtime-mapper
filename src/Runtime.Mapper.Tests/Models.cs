@@ -71,6 +71,10 @@ namespace Runtime.Mapper.Tests
 
         public Dictionary<Guid, bool> DictionaryGuidBool { get; set; }
 
+        public Dictionary<Guid, float> DictionaryGuidFloat { get; set; }
+
+        public Dictionary<Guid, double> DictionaryGuidDouble { get; set; }
+
         #endregion
 
         #region Nullable primitives - Value

@@ -46,7 +46,8 @@ namespace Runtime.Mapper.Tests
                 DictionaryGuidDateTime = new Dictionary<Guid, DateTime>() { { Constants.Guid.value3, Constants.DateTime.value1 } },
                 DictionaryGuidGuid = new Dictionary<Guid, Guid>() { { Constants.Guid.value3, Constants.Guid.value1 } },
                 DictionaryGuidBool = new Dictionary<Guid, bool>() { { Constants.Guid.value3, Constants.Bool.value1 } },
-                // TODO: add dictionary scenario for Float and Double
+                DictionaryGuidFloat = new Dictionary<Guid, float>() { { Constants.Guid.value3, Constants.Float.value1 } },
+                DictionaryGuidDouble = new Dictionary<Guid, double>() { { Constants.Guid.value3, Constants.Double.value1 } },
 
                 // Nullable primitives - Value
                 BoolNullable = Constants.Bool.value1,
@@ -153,6 +154,12 @@ namespace Runtime.Mapper.Tests
 
             Assert.AreNotEqual(source.DictionaryGuidBool, destination.DictionaryGuidBool);
             Assert.AreEqual(Constants.Bool.value1, destination.DictionaryGuidBool[Constants.Guid.value3]);
+
+            Assert.AreNotEqual(source.DictionaryGuidFloat, destination.DictionaryGuidFloat);
+            Assert.AreEqual(Constants.Float.value1, destination.DictionaryGuidFloat[Constants.Guid.value3]);
+
+            Assert.AreNotEqual(source.DictionaryGuidDouble, destination.DictionaryGuidDouble);
+            Assert.AreEqual(Constants.Double.value1, destination.DictionaryGuidDouble[Constants.Guid.value3]);
 
             // Nullable primitives - Value
             Assert.AreEqual(Constants.Bool.value1, destination.BoolNullable);
