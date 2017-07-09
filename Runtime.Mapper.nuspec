@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+	<metadata>
+		<id>Runtime.Mapper</id>
+		<version>1.0.0-beta</version>
+		<authors>Alex Oancea</authors>
+		<owners>Alex Oancea</owners>
+		<licenseUrl>https://github.com/aoancea/runtime-mapper/blob/master/LICENSE</licenseUrl>
+		<projectUrl>https://github.com/aoancea/runtime-mapper</projectUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>A configuration free object-to-object mapper in .NET.</description>
+		<releaseNotes></releaseNotes>
+	</metadata>
+	<files>
+		<file src="src\Runtime.Mapper\bin\Release\Runtime.Mapper.dll" target="lib\net45" />
+	</files>
+</package>
