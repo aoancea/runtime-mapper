@@ -35,6 +35,9 @@ namespace Runtime.Mapper
 
         public static void Map<TSource, TDestination>(TSource source, TDestination destination)
         {
+            if (source == null)
+                return;
+
             Type sourceType = source.GetType();
             Type destinationType = typeof(TDestination);
 

@@ -35,8 +35,6 @@ namespace Runtime.Mapper.Tests
             ScenarioHelper.Assert_Mule(source, destination);
         }
 
-
-
         [TestMethod]
         public void DeepCopyTo_ClassWithDictionaryMapsToClassWithDictionaryOfDifferentCustomType_DestinationCopied()
         {
@@ -66,6 +64,18 @@ namespace Runtime.Mapper.Tests
             ScenarioHelper.Assert_Mule(source.Prop3[Constants.Guid.value2], destination.Prop3[Constants.Guid.value2]);
         }
 
+
+        [TestMethod]
+        public void DeepCopyTo_SourceIsNull_DontCopy()
+        {
+            Cow source = null;
+
+            Cow destination = new Cow();
+
+            Mapper.Map(source, destination);
+
+            Assert.IsNotNull(destination);
+        }
 
         #region Aggregate types
 
