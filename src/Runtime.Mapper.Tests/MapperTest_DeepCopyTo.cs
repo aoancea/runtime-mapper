@@ -702,6 +702,450 @@ namespace Runtime.Mapper.Tests
         }
 
         #endregion
+        
+        #region Array -> Array - Derived types
+
+        [TestMethod]
+        public void DeepCopyTo_SourceOfInterfaceArrayToDestinationOfInterfaceArray_DestinationCopied()
+        {
+            IInterface[] source = new IInterface[]
+            {
+                new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value1, Constants.String.value1 } } },
+                new Child1() { Prop1 = Constants.Int.value2, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value2, Constants.String.value2 } }, Prop3 = Constants.Decimal.value2 },
+                new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } } },
+            };
+
+            IInterface[] destination = source.DeepCopyTo<IInterface[]>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(Constants.Int.value1, ((Parent)destination[0]).Prop1);
+            Assert.AreNotEqual(((Parent)source[0]).Prop2, ((Parent)destination[0]).Prop2);
+            Assert.AreEqual(Constants.String.value1, ((Parent)destination[0]).Prop2[Constants.Guid.value1]);
+
+            Assert.AreEqual(Constants.Int.value2, ((Child1)destination[1]).Prop1);
+            Assert.AreNotEqual(((Child1)source[1]).Prop2, ((Child1)destination[1]).Prop2);
+            Assert.AreEqual(Constants.String.value2, ((Child1)destination[1]).Prop2[Constants.Guid.value2]);
+            Assert.AreEqual(Constants.Decimal.value2, ((Child1)destination[1]).Prop3);
+
+            Assert.AreEqual(Constants.Int.value1, ((Parent)destination[2]).Prop1);
+            Assert.AreNotEqual(((Parent)source[2]).Prop2, ((Parent)destination[2]).Prop2);
+            Assert.AreEqual(Constants.String.value1, ((Parent)destination[2]).Prop2[Constants.Guid.value3]);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_SourceOfAbstractArrayToDestinationOfAbstractArray_DestinationCopied()
+        {
+            AbstractClass[] source = new AbstractClass[]
+            {
+                new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value1, Constants.String.value1 } } },
+                new Child1() { Prop1 = Constants.Int.value2, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value2, Constants.String.value2 } }, Prop3 = Constants.Decimal.value2 },
+                new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } } },
+            };
+
+            AbstractClass[] destination = source.DeepCopyTo<AbstractClass[]>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(Constants.Int.value1, ((Parent)destination[0]).Prop1);
+            Assert.AreNotEqual(((Parent)source[0]).Prop2, ((Parent)destination[0]).Prop2);
+            Assert.AreEqual(Constants.String.value1, ((Parent)destination[0]).Prop2[Constants.Guid.value1]);
+
+            Assert.AreEqual(Constants.Int.value2, ((Child1)destination[1]).Prop1);
+            Assert.AreNotEqual(((Child1)source[1]).Prop2, ((Child1)destination[1]).Prop2);
+            Assert.AreEqual(Constants.String.value2, ((Child1)destination[1]).Prop2[Constants.Guid.value2]);
+            Assert.AreEqual(Constants.Decimal.value2, ((Child1)destination[1]).Prop3);
+
+            Assert.AreEqual(Constants.Int.value1, ((Parent)destination[2]).Prop1);
+            Assert.AreNotEqual(((Parent)source[2]).Prop2, ((Parent)destination[2]).Prop2);
+            Assert.AreEqual(Constants.String.value1, ((Parent)destination[2]).Prop2[Constants.Guid.value3]);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_SourceOfBaseArrayToDestinationOfDerivedArray_DestinationCopied()
+        {
+            Parent[] source = new Parent[]
+            {
+                new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value1, Constants.String.value1 } } },
+                new Child1() { Prop1 = Constants.Int.value2, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value2, Constants.String.value2 } }, Prop3 = Constants.Decimal.value2 },
+                new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } } },
+            };
+
+            Child1[] destination = source.DeepCopyTo<Child1[]>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(typeof(Child1), destination[0].GetType());
+            Assert.AreEqual(Constants.Int.value1, destination[0].Prop1);
+            Assert.AreNotEqual(source[0].Prop2, destination[0].Prop2);
+            Assert.AreEqual(Constants.String.value1, destination[0].Prop2[Constants.Guid.value1]);
+            Assert.AreEqual(decimal.Zero, destination[0].Prop3);
+
+            Assert.AreEqual(typeof(Child1), destination[1].GetType());
+            Assert.AreEqual(Constants.Int.value2, destination[1].Prop1);
+            Assert.AreNotEqual(((Child1)source[1]).Prop2, destination[1].Prop2);
+            Assert.AreEqual(Constants.String.value2, destination[1].Prop2[Constants.Guid.value2]);
+            Assert.AreEqual(Constants.Decimal.value2, destination[1].Prop3);
+
+            Assert.AreEqual(typeof(Child1), destination[2].GetType());
+            Assert.AreEqual(Constants.Int.value1, destination[2].Prop1);
+            Assert.AreNotEqual(source[2].Prop2, destination[2].Prop2);
+            Assert.AreEqual(Constants.String.value1, destination[2].Prop2[Constants.Guid.value3]);
+            Assert.AreEqual(decimal.Zero, destination[2].Prop3);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_SourceOfDerivedArrayToDestinationOfBaseArray_DestinationCopied()
+        {
+            Child1[] source = new Child1[]
+            {
+                new Child1() { Prop1 = Constants.Int.value2, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value2, Constants.String.value2 } }, Prop3 = Constants.Decimal.value2 },
+            };
+
+            Parent[] destination = source.DeepCopyTo<Parent[]>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(typeof(Parent), destination[0].GetType());
+            Assert.AreEqual(Constants.Int.value2, destination[0].Prop1);
+            Assert.AreNotEqual(source[0].Prop2, destination[0].Prop2);
+            Assert.AreEqual(Constants.String.value2, destination[0].Prop2[Constants.Guid.value2]);
+        }
+
+        #endregion
+
+        #region List -> List - Derived types
+
+        [TestMethod]
+        public void DeepCopyTo_SourceOfInterfaceListToDestinationOfInterfaceList_DestinationCopied()
+        {
+            List<IInterface> source = new List<IInterface>
+            {
+                new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value1, Constants.String.value1 } } },
+                new Child1() { Prop1 = Constants.Int.value2, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value2, Constants.String.value2 } }, Prop3 = Constants.Decimal.value2 },
+                new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } } },
+            };
+
+            List<IInterface> destination = source.DeepCopyTo<List<IInterface>>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(Constants.Int.value1, ((Parent)destination[0]).Prop1);
+            Assert.AreNotEqual(((Parent)source[0]).Prop2, ((Parent)destination[0]).Prop2);
+            Assert.AreEqual(Constants.String.value1, ((Parent)destination[0]).Prop2[Constants.Guid.value1]);
+
+            Assert.AreEqual(Constants.Int.value2, ((Child1)destination[1]).Prop1);
+            Assert.AreNotEqual(((Child1)source[1]).Prop2, ((Child1)destination[1]).Prop2);
+            Assert.AreEqual(Constants.String.value2, ((Child1)destination[1]).Prop2[Constants.Guid.value2]);
+            Assert.AreEqual(Constants.Decimal.value2, ((Child1)destination[1]).Prop3);
+
+            Assert.AreEqual(Constants.Int.value1, ((Parent)destination[2]).Prop1);
+            Assert.AreNotEqual(((Parent)source[2]).Prop2, ((Parent)destination[2]).Prop2);
+            Assert.AreEqual(Constants.String.value1, ((Parent)destination[2]).Prop2[Constants.Guid.value3]);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_SourceOfAbstractListToDestinationOfAbstractList_DestinationCopied()
+        {
+            List<AbstractClass> source = new List<AbstractClass>
+            {
+                new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value1, Constants.String.value1 } } },
+                new Child1() { Prop1 = Constants.Int.value2, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value2, Constants.String.value2 } }, Prop3 = Constants.Decimal.value2 },
+                new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } } },
+            };
+
+            List<AbstractClass> destination = source.DeepCopyTo<List<AbstractClass>>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(Constants.Int.value1, ((Parent)destination[0]).Prop1);
+            Assert.AreNotEqual(((Parent)source[0]).Prop2, ((Parent)destination[0]).Prop2);
+            Assert.AreEqual(Constants.String.value1, ((Parent)destination[0]).Prop2[Constants.Guid.value1]);
+
+            Assert.AreEqual(Constants.Int.value2, ((Child1)destination[1]).Prop1);
+            Assert.AreNotEqual(((Child1)source[1]).Prop2, ((Child1)destination[1]).Prop2);
+            Assert.AreEqual(Constants.String.value2, ((Child1)destination[1]).Prop2[Constants.Guid.value2]);
+            Assert.AreEqual(Constants.Decimal.value2, ((Child1)destination[1]).Prop3);
+
+            Assert.AreEqual(Constants.Int.value1, ((Parent)destination[2]).Prop1);
+            Assert.AreNotEqual(((Parent)source[2]).Prop2, ((Parent)destination[2]).Prop2);
+            Assert.AreEqual(Constants.String.value1, ((Parent)destination[2]).Prop2[Constants.Guid.value3]);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_SourceOfBaseListToDestinationOfDerivedList_DestinationCopied()
+        {
+            List<Parent> source = new List<Parent>
+            {
+                new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value1, Constants.String.value1 } } },
+                new Child1() { Prop1 = Constants.Int.value2, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value2, Constants.String.value2 } }, Prop3 = Constants.Decimal.value2 },
+                new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } } },
+            };
+
+            List<Child1> destination = source.DeepCopyTo<List<Child1>>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(typeof(Child1), destination[0].GetType());
+            Assert.AreEqual(Constants.Int.value1, destination[0].Prop1);
+            Assert.AreNotEqual(source[0].Prop2, destination[0].Prop2);
+            Assert.AreEqual(Constants.String.value1, destination[0].Prop2[Constants.Guid.value1]);
+            Assert.AreEqual(decimal.Zero, destination[0].Prop3);
+
+            Assert.AreEqual(typeof(Child1), destination[1].GetType());
+            Assert.AreEqual(Constants.Int.value2, destination[1].Prop1);
+            Assert.AreNotEqual(((Child1)source[1]).Prop2, destination[1].Prop2);
+            Assert.AreEqual(Constants.String.value2, destination[1].Prop2[Constants.Guid.value2]);
+            Assert.AreEqual(Constants.Decimal.value2, destination[1].Prop3);
+
+            Assert.AreEqual(typeof(Child1), destination[2].GetType());
+            Assert.AreEqual(Constants.Int.value1, destination[2].Prop1);
+            Assert.AreNotEqual(source[2].Prop2, destination[2].Prop2);
+            Assert.AreEqual(Constants.String.value1, destination[2].Prop2[Constants.Guid.value3]);
+            Assert.AreEqual(decimal.Zero, destination[2].Prop3);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_SourceOfDerivedListToDestinationOfBaseList_DestinationCopied()
+        {
+            List<Child1> source = new List<Child1>
+            {
+                new Child1() { Prop1 = Constants.Int.value2, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value2, Constants.String.value2 } }, Prop3 = Constants.Decimal.value2 },
+            };
+
+            List<Parent> destination = source.DeepCopyTo<List<Parent>>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(typeof(Parent), destination[0].GetType());
+            Assert.AreEqual(Constants.Int.value2, destination[0].Prop1);
+            Assert.AreNotEqual(source[0].Prop2, destination[0].Prop2);
+            Assert.AreEqual(Constants.String.value2, destination[0].Prop2[Constants.Guid.value2]);
+        }
+
+        #endregion
+
+        #region Array -> List - Derived types
+
+        [TestMethod]
+        public void DeepCopyTo_SourceOfInterfaceArrayToDestinationOfInterfaceList_DestinationCopied()
+        {
+            IInterface[] source = new IInterface[]
+            {
+                new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value1, Constants.String.value1 } } },
+                new Child1() { Prop1 = Constants.Int.value2, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value2, Constants.String.value2 } }, Prop3 = Constants.Decimal.value2 },
+                new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } } },
+            };
+
+            List<IInterface> destination = source.DeepCopyTo<List<IInterface>>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(Constants.Int.value1, ((Parent)destination[0]).Prop1);
+            Assert.AreNotEqual(((Parent)source[0]).Prop2, ((Parent)destination[0]).Prop2);
+            Assert.AreEqual(Constants.String.value1, ((Parent)destination[0]).Prop2[Constants.Guid.value1]);
+
+            Assert.AreEqual(Constants.Int.value2, ((Child1)destination[1]).Prop1);
+            Assert.AreNotEqual(((Child1)source[1]).Prop2, ((Child1)destination[1]).Prop2);
+            Assert.AreEqual(Constants.String.value2, ((Child1)destination[1]).Prop2[Constants.Guid.value2]);
+            Assert.AreEqual(Constants.Decimal.value2, ((Child1)destination[1]).Prop3);
+
+            Assert.AreEqual(Constants.Int.value1, ((Parent)destination[2]).Prop1);
+            Assert.AreNotEqual(((Parent)source[2]).Prop2, ((Parent)destination[2]).Prop2);
+            Assert.AreEqual(Constants.String.value1, ((Parent)destination[2]).Prop2[Constants.Guid.value3]);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_SourceOfAbstractArrayToDestinationOfAbstractList_DestinationCopied()
+        {
+            AbstractClass[] source = new AbstractClass[]
+            {
+                new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value1, Constants.String.value1 } } },
+                new Child1() { Prop1 = Constants.Int.value2, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value2, Constants.String.value2 } }, Prop3 = Constants.Decimal.value2 },
+                new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } } },
+            };
+
+            List<AbstractClass> destination = source.DeepCopyTo<List<AbstractClass>>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(Constants.Int.value1, ((Parent)destination[0]).Prop1);
+            Assert.AreNotEqual(((Parent)source[0]).Prop2, ((Parent)destination[0]).Prop2);
+            Assert.AreEqual(Constants.String.value1, ((Parent)destination[0]).Prop2[Constants.Guid.value1]);
+
+            Assert.AreEqual(Constants.Int.value2, ((Child1)destination[1]).Prop1);
+            Assert.AreNotEqual(((Child1)source[1]).Prop2, ((Child1)destination[1]).Prop2);
+            Assert.AreEqual(Constants.String.value2, ((Child1)destination[1]).Prop2[Constants.Guid.value2]);
+            Assert.AreEqual(Constants.Decimal.value2, ((Child1)destination[1]).Prop3);
+
+            Assert.AreEqual(Constants.Int.value1, ((Parent)destination[2]).Prop1);
+            Assert.AreNotEqual(((Parent)source[2]).Prop2, ((Parent)destination[2]).Prop2);
+            Assert.AreEqual(Constants.String.value1, ((Parent)destination[2]).Prop2[Constants.Guid.value3]);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_SourceOfBaseArrayToDestinationOfDerivedList_DestinationCopied()
+        {
+            Parent[] source = new Parent[]
+            {
+                new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value1, Constants.String.value1 } } },
+                new Child1() { Prop1 = Constants.Int.value2, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value2, Constants.String.value2 } }, Prop3 = Constants.Decimal.value2 },
+                new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } } },
+            };
+
+            List<Child1> destination = source.DeepCopyTo<List<Child1>>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(typeof(Child1), destination[0].GetType());
+            Assert.AreEqual(Constants.Int.value1, destination[0].Prop1);
+            Assert.AreNotEqual(source[0].Prop2, destination[0].Prop2);
+            Assert.AreEqual(Constants.String.value1, destination[0].Prop2[Constants.Guid.value1]);
+            Assert.AreEqual(decimal.Zero, destination[0].Prop3);
+
+            Assert.AreEqual(typeof(Child1), destination[1].GetType());
+            Assert.AreEqual(Constants.Int.value2, destination[1].Prop1);
+            Assert.AreNotEqual(((Child1)source[1]).Prop2, destination[1].Prop2);
+            Assert.AreEqual(Constants.String.value2, destination[1].Prop2[Constants.Guid.value2]);
+            Assert.AreEqual(Constants.Decimal.value2, destination[1].Prop3);
+
+            Assert.AreEqual(typeof(Child1), destination[2].GetType());
+            Assert.AreEqual(Constants.Int.value1, destination[2].Prop1);
+            Assert.AreNotEqual(source[2].Prop2, destination[2].Prop2);
+            Assert.AreEqual(Constants.String.value1, destination[2].Prop2[Constants.Guid.value3]);
+            Assert.AreEqual(decimal.Zero, destination[2].Prop3);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_SourceOfDerivedArrayToDestinationOfBaseList_DestinationCopied()
+        {
+            Child1[] source = new Child1[]
+            {
+                new Child1() { Prop1 = Constants.Int.value2, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value2, Constants.String.value2 } }, Prop3 = Constants.Decimal.value2 },
+            };
+
+            List<Parent> destination = source.DeepCopyTo<List<Parent>>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(typeof(Parent), destination[0].GetType());
+            Assert.AreEqual(Constants.Int.value2, destination[0].Prop1);
+            Assert.AreNotEqual(source[0].Prop2, destination[0].Prop2);
+            Assert.AreEqual(Constants.String.value2, destination[0].Prop2[Constants.Guid.value2]);
+        }
+
+        #endregion
+
+        #region List -> List - Derived types
+
+        [TestMethod]
+        public void DeepCopyTo_SourceOfInterfaceListToDestinationOfInterfaceArray_DestinationCopied()
+        {
+            List<IInterface> source = new List<IInterface>
+            {
+                new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value1, Constants.String.value1 } } },
+                new Child1() { Prop1 = Constants.Int.value2, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value2, Constants.String.value2 } }, Prop3 = Constants.Decimal.value2 },
+                new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } } },
+            };
+
+            IInterface[] destination = source.DeepCopyTo<IInterface[]>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(Constants.Int.value1, ((Parent)destination[0]).Prop1);
+            Assert.AreNotEqual(((Parent)source[0]).Prop2, ((Parent)destination[0]).Prop2);
+            Assert.AreEqual(Constants.String.value1, ((Parent)destination[0]).Prop2[Constants.Guid.value1]);
+
+            Assert.AreEqual(Constants.Int.value2, ((Child1)destination[1]).Prop1);
+            Assert.AreNotEqual(((Child1)source[1]).Prop2, ((Child1)destination[1]).Prop2);
+            Assert.AreEqual(Constants.String.value2, ((Child1)destination[1]).Prop2[Constants.Guid.value2]);
+            Assert.AreEqual(Constants.Decimal.value2, ((Child1)destination[1]).Prop3);
+
+            Assert.AreEqual(Constants.Int.value1, ((Parent)destination[2]).Prop1);
+            Assert.AreNotEqual(((Parent)source[2]).Prop2, ((Parent)destination[2]).Prop2);
+            Assert.AreEqual(Constants.String.value1, ((Parent)destination[2]).Prop2[Constants.Guid.value3]);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_SourceOfAbstractListToDestinationOfAbstractArray_DestinationCopied()
+        {
+            List<AbstractClass> source = new List<AbstractClass>
+            {
+                new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value1, Constants.String.value1 } } },
+                new Child1() { Prop1 = Constants.Int.value2, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value2, Constants.String.value2 } }, Prop3 = Constants.Decimal.value2 },
+                new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } } },
+            };
+
+            AbstractClass[] destination = source.DeepCopyTo<AbstractClass[]>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(Constants.Int.value1, ((Parent)destination[0]).Prop1);
+            Assert.AreNotEqual(((Parent)source[0]).Prop2, ((Parent)destination[0]).Prop2);
+            Assert.AreEqual(Constants.String.value1, ((Parent)destination[0]).Prop2[Constants.Guid.value1]);
+
+            Assert.AreEqual(Constants.Int.value2, ((Child1)destination[1]).Prop1);
+            Assert.AreNotEqual(((Child1)source[1]).Prop2, ((Child1)destination[1]).Prop2);
+            Assert.AreEqual(Constants.String.value2, ((Child1)destination[1]).Prop2[Constants.Guid.value2]);
+            Assert.AreEqual(Constants.Decimal.value2, ((Child1)destination[1]).Prop3);
+
+            Assert.AreEqual(Constants.Int.value1, ((Parent)destination[2]).Prop1);
+            Assert.AreNotEqual(((Parent)source[2]).Prop2, ((Parent)destination[2]).Prop2);
+            Assert.AreEqual(Constants.String.value1, ((Parent)destination[2]).Prop2[Constants.Guid.value3]);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_SourceOfBaseListToDestinationOfDerivedArray_DestinationCopied()
+        {
+            List<Parent> source = new List<Parent>
+            {
+                new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value1, Constants.String.value1 } } },
+                new Child1() { Prop1 = Constants.Int.value2, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value2, Constants.String.value2 } }, Prop3 = Constants.Decimal.value2 },
+                new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } } },
+            };
+
+            Child1[] destination = source.DeepCopyTo<Child1[]>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(typeof(Child1), destination[0].GetType());
+            Assert.AreEqual(Constants.Int.value1, destination[0].Prop1);
+            Assert.AreNotEqual(source[0].Prop2, destination[0].Prop2);
+            Assert.AreEqual(Constants.String.value1, destination[0].Prop2[Constants.Guid.value1]);
+            Assert.AreEqual(decimal.Zero, destination[0].Prop3);
+
+            Assert.AreEqual(typeof(Child1), destination[1].GetType());
+            Assert.AreEqual(Constants.Int.value2, destination[1].Prop1);
+            Assert.AreNotEqual(((Child1)source[1]).Prop2, destination[1].Prop2);
+            Assert.AreEqual(Constants.String.value2, destination[1].Prop2[Constants.Guid.value2]);
+            Assert.AreEqual(Constants.Decimal.value2, destination[1].Prop3);
+
+            Assert.AreEqual(typeof(Child1), destination[2].GetType());
+            Assert.AreEqual(Constants.Int.value1, destination[2].Prop1);
+            Assert.AreNotEqual(source[2].Prop2, destination[2].Prop2);
+            Assert.AreEqual(Constants.String.value1, destination[2].Prop2[Constants.Guid.value3]);
+            Assert.AreEqual(decimal.Zero, destination[2].Prop3);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_SourceOfDerivedListToDestinationOfBaseArray_DestinationCopied()
+        {
+            List<Child1> source = new List<Child1>
+            {
+                new Child1() { Prop1 = Constants.Int.value2, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value2, Constants.String.value2 } }, Prop3 = Constants.Decimal.value2 },
+            };
+
+            Parent[] destination = source.DeepCopyTo<Parent[]>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(typeof(Parent), destination[0].GetType());
+            Assert.AreEqual(Constants.Int.value2, destination[0].Prop1);
+            Assert.AreNotEqual(source[0].Prop2, destination[0].Prop2);
+            Assert.AreEqual(Constants.String.value2, destination[0].Prop2[Constants.Guid.value2]);
+        }
+
+        #endregion
 
         #endregion
 
@@ -1055,6 +1499,110 @@ namespace Runtime.Mapper.Tests
 
             Assert.IsNull(destination.CircularReferenceProperty.CircularReferenceProperty);
         }
+
+        #endregion
+
+
+
+        #region Derived types
+
+        [TestMethod]
+        public void DeepCopyTo_Interface_To_Interface_DestinationCopied()
+        {
+            IInterface source = new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } } };
+
+            IInterface destination = source.DeepCopyTo<IInterface>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(Constants.Int.value1, ((Parent)destination).Prop1);
+
+            Assert.AreNotEqual(((Parent)source).Prop2, ((Parent)destination).Prop2);
+            Assert.AreEqual(Constants.String.value1, ((Parent)destination).Prop2[Constants.Guid.value3]);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_Interface_To_Abstract_DestinationCopied()
+        {
+            IInterface source = new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } } };
+
+            AbstractClass destination = source.DeepCopyTo<AbstractClass>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(Constants.Int.value1, ((Parent)destination).Prop1);
+
+            Assert.AreNotEqual(((Parent)source).Prop2, ((Parent)destination).Prop2);
+            Assert.AreEqual(Constants.String.value1, ((Parent)destination).Prop2[Constants.Guid.value3]);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_Abstrat_To_Abstract_DestinationCopied()
+        {
+            AbstractClass source = new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } } };
+
+            AbstractClass destination = source.DeepCopyTo<AbstractClass>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(Constants.Int.value1, ((Parent)destination).Prop1);
+
+            Assert.AreNotEqual(((Parent)source).Prop2, ((Parent)destination).Prop2);
+            Assert.AreEqual(Constants.String.value1, ((Parent)destination).Prop2[Constants.Guid.value3]);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_Abstract_To_Interface_DestinationCopied()
+        {
+            AbstractClass source = new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } } };
+
+            IInterface destination = source.DeepCopyTo<IInterface>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(Constants.Int.value1, ((Parent)destination).Prop1);
+
+            Assert.AreNotEqual(((Parent)source).Prop2, ((Parent)destination).Prop2);
+            Assert.AreEqual(Constants.String.value1, ((Parent)destination).Prop2[Constants.Guid.value3]);
+        }
+
+
+        [TestMethod]
+        public void DeepCopyTo_Derived_To_Base_DestinationCopied()
+        {
+            Child1 source = new Child1() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } }, Prop3 = Constants.Decimal.value1 };
+
+            Parent destination = source.DeepCopyTo<Parent>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(typeof(Parent), destination.GetType());
+
+            Assert.AreEqual(Constants.Int.value1, destination.Prop1);
+
+            Assert.AreNotEqual(source.Prop2, destination.Prop2);
+            Assert.AreEqual(Constants.String.value1, destination.Prop2[Constants.Guid.value3]);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_Base_To_Derived_DestinationCopied()
+        {
+            Parent source = new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } } };
+
+            Child1 destination = source.DeepCopyTo<Child1>();
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(typeof(Child1), destination.GetType());
+
+            Assert.AreEqual(Constants.Int.value1, destination.Prop1);
+
+            Assert.AreNotEqual(source.Prop2, destination.Prop2);
+            Assert.AreEqual(Constants.String.value1, destination.Prop2[Constants.Guid.value3]);
+
+            Assert.AreEqual(decimal.Zero, destination.Prop3);
+        }
+
 
         #endregion
     }

@@ -48,8 +48,14 @@ namespace Runtime.Mapper
 
         private static Func<object, object, object> GetMappingFunction(Type sourceType, Type destinationType)
         {
-            if (destinationType == typeof(object) && sourceType != destinationType)
-                destinationType = sourceType;
+            if (sourceType != destinationType)
+            {
+                if (destinationType == typeof(object))
+                    destinationType = sourceType;
+
+                if ((destinationType.IsInterface || destinationType.IsAbstract) && destinationType.IsAssignableFrom(sourceType))
+                    destinationType = sourceType;
+            }
 
             ParameterExpression sourceParam = Expression.Parameter(typeof(object), "sourceObj");
             ParameterExpression destinationParam = Expression.Parameter(typeof(object), "destinationObj");

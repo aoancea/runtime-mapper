@@ -426,5 +426,115 @@ namespace Runtime.Mapper.Tests
         }
 
         #endregion
+
+
+        [TestMethod]
+        public void DeepCopyTo_Interface_To_Interface_DestinationCopied()
+        {
+            IInterface source = new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } } };
+
+            IInterface destination = new Parent();
+
+            Mapper.Map(source, destination);
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(Constants.Int.value1, ((Parent)destination).Prop1);
+
+            Assert.AreNotEqual(((Parent)source).Prop2, ((Parent)destination).Prop2);
+            Assert.AreEqual(Constants.String.value1, ((Parent)destination).Prop2[Constants.Guid.value3]);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_Interface_To_Abstract_DestinationCopied()
+        {
+            IInterface source = new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } } };
+
+            AbstractClass destination = new Parent();
+
+            Mapper.Map(source, destination);
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(Constants.Int.value1, ((Parent)destination).Prop1);
+
+            Assert.AreNotEqual(((Parent)source).Prop2, ((Parent)destination).Prop2);
+            Assert.AreEqual(Constants.String.value1, ((Parent)destination).Prop2[Constants.Guid.value3]);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_Abstrat_To_Abstract_DestinationCopied()
+        {
+            AbstractClass source = new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } } };
+
+            AbstractClass destination = new Parent();
+
+            Mapper.Map(source, destination);
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(Constants.Int.value1, ((Parent)destination).Prop1);
+
+            Assert.AreNotEqual(((Parent)source).Prop2, ((Parent)destination).Prop2);
+            Assert.AreEqual(Constants.String.value1, ((Parent)destination).Prop2[Constants.Guid.value3]);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_Abstract_To_Interface_DestinationCopied()
+        {
+            AbstractClass source = new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } } };
+
+            IInterface destination = new Parent();
+
+            Mapper.Map(source, destination);
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(Constants.Int.value1, ((Parent)destination).Prop1);
+
+            Assert.AreNotEqual(((Parent)source).Prop2, ((Parent)destination).Prop2);
+            Assert.AreEqual(Constants.String.value1, ((Parent)destination).Prop2[Constants.Guid.value3]);
+        }
+
+
+        [TestMethod]
+        public void DeepCopyTo_Derived_To_Base_DestinationCopied()
+        {
+            Child1 source = new Child1() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } }, Prop3 = Constants.Decimal.value1 };
+
+            Parent destination = new Parent();
+
+            Mapper.Map(source, destination);
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(typeof(Parent), destination.GetType());
+
+            Assert.AreEqual(Constants.Int.value1, destination.Prop1);
+
+            Assert.AreNotEqual(source.Prop2, destination.Prop2);
+            Assert.AreEqual(Constants.String.value1, destination.Prop2[Constants.Guid.value3]);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_Base_To_Derived_DestinationCopied()
+        {
+            Parent source = new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } } };
+
+            Child1 destination = new Child1();
+
+            Mapper.Map(source, destination);
+
+            Assert.AreNotEqual(source, destination);
+
+            Assert.AreEqual(typeof(Child1), destination.GetType());
+
+            Assert.AreEqual(Constants.Int.value1, destination.Prop1);
+
+            Assert.AreNotEqual(source.Prop2, destination.Prop2);
+            Assert.AreEqual(Constants.String.value1, destination.Prop2[Constants.Guid.value3]);
+
+            Assert.AreEqual(decimal.Zero, destination.Prop3);
+        }
     }
 }

@@ -179,6 +179,28 @@ namespace Runtime.Mapper.Tests
         Three = 2
     }
 
+    internal interface IInterface
+    {
+
+    }
+
+    internal abstract class AbstractClass : IInterface
+    {
+
+    }
+
+    internal class Parent : AbstractClass, IInterface
+    {
+        public int Prop1 { get; set; }
+
+        public Dictionary<Guid, string> Prop2 { get; set; }
+    }
+
+    internal class Child1 : Parent
+    {
+        public decimal Prop3 { get; set; }
+    }
+
     #region A
     internal class A_BigClass : BaseClass
     {
