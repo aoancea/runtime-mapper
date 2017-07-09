@@ -20,6 +20,8 @@ namespace Runtime.Mapper.Tests
                 Guid = Constants.Guid.value1,
                 Int = Constants.Int.value1,
                 String = Constants.String.value1,
+                Float = Constants.Float.value1,
+                Double = Constants.Double.value1,
 
                 // Primitives - Default
                 BoolDefault = default(bool),
@@ -28,6 +30,8 @@ namespace Runtime.Mapper.Tests
                 GuidDefault = default(Guid),
                 IntDefault = default(int),
                 StringDefault = default(string),
+                FloatDefault = default(float),
+                DoubleDefault = default(double),
 
                 //Enums - Value
                 Enum = Enumeration.Three,
@@ -42,6 +46,7 @@ namespace Runtime.Mapper.Tests
                 DictionaryGuidDateTime = new Dictionary<Guid, DateTime>() { { Constants.Guid.value3, Constants.DateTime.value1 } },
                 DictionaryGuidGuid = new Dictionary<Guid, Guid>() { { Constants.Guid.value3, Constants.Guid.value1 } },
                 DictionaryGuidBool = new Dictionary<Guid, bool>() { { Constants.Guid.value3, Constants.Bool.value1 } },
+                // TODO: add dictionary scenario for Float and Double
 
                 // Nullable primitives - Value
                 BoolNullable = Constants.Bool.value1,
@@ -49,6 +54,8 @@ namespace Runtime.Mapper.Tests
                 DecimalNullable = Constants.Decimal.value1,
                 GuidNullable = Constants.Guid.value1,
                 IntNullable = Constants.Int.value1,
+                FloatNullable = Constants.Float.value1,
+                DoubleNullable = Constants.Double.value1,
 
                 // Nullable primitives - Null
                 BoolNullableDefault = default(bool?),
@@ -56,6 +63,8 @@ namespace Runtime.Mapper.Tests
                 DecimalNullableDefault = default(decimal?),
                 GuidNullableDefault = default(Guid?),
                 IntNullableDefault = default(int?),
+                FloatNullableDefault = default(float?),
+                DoubleNullableDefault = default(double?),
 
                 // Array of primitives
                 BoolArray = new bool[] { Constants.Bool.value1, Constants.Bool.value2 },
@@ -64,6 +73,8 @@ namespace Runtime.Mapper.Tests
                 GuidArray = new Guid[] { Constants.Guid.value1, Constants.Guid.value2 },
                 IntArray = new int[] { Constants.Int.value1, Constants.Int.value2 },
                 StringArray = new string[] { Constants.String.value1, Constants.String.value2 },
+                FloatArray = new float[] { Constants.Float.value1, Constants.Float.value2 },
+                DoubleArray = new double[] { Constants.Double.value1, Constants.Double.value2 },
 
                 // List of primitives
                 BoolList = new List<bool>() { Constants.Bool.value1, Constants.Bool.value2 },
@@ -72,6 +83,8 @@ namespace Runtime.Mapper.Tests
                 GuidList = new List<Guid>() { Constants.Guid.value1, Constants.Guid.value2 },
                 IntList = new List<int>() { Constants.Int.value1, Constants.Int.value2 },
                 StringList = new List<string>() { Constants.String.value1, Constants.String.value2 },
+                FloatList = new List<float>() { Constants.Float.value1, Constants.Float.value2 },
+                DoubleList = new List<double>() { Constants.Double.value1, Constants.Double.value2 },
 
                 // Objects
                 Object1 = Constants.String.value1,
@@ -102,6 +115,8 @@ namespace Runtime.Mapper.Tests
             Assert.AreEqual(Constants.Guid.value1, destination.Guid);
             Assert.AreEqual(Constants.Int.value1, destination.Int);
             Assert.AreEqual(Constants.String.value1, destination.String);
+            Assert.AreEqual(Constants.Float.value1, destination.Float);
+            Assert.AreEqual(Constants.Double.value1, destination.Double);
 
             // Primitives - Default
             Assert.AreEqual(false, destination.BoolDefault);
@@ -110,6 +125,8 @@ namespace Runtime.Mapper.Tests
             Assert.AreEqual(Guid.Empty, destination.GuidDefault);
             Assert.AreEqual(0, destination.IntDefault);
             Assert.AreEqual(null, destination.StringDefault);
+            Assert.AreEqual(0f, destination.FloatDefault);
+            Assert.AreEqual(0d, destination.DoubleDefault);
 
             //Enums - Value
             Assert.AreEqual(Enumeration.Three, destination.Enum);
@@ -143,6 +160,8 @@ namespace Runtime.Mapper.Tests
             Assert.AreEqual(Constants.Decimal.value1, destination.DecimalNullable);
             Assert.AreEqual(Constants.Guid.value1, destination.GuidNullable);
             Assert.AreEqual(Constants.Int.value1, destination.IntNullable);
+            Assert.AreEqual(Constants.Float.value1, destination.FloatNullable);
+            Assert.AreEqual(Constants.Double.value1, destination.DoubleNullable);
 
             // Nullable primitives - Null
             Assert.AreEqual(null, destination.BoolNullableDefault);
@@ -150,6 +169,8 @@ namespace Runtime.Mapper.Tests
             Assert.AreEqual(null, destination.DecimalNullableDefault);
             Assert.AreEqual(null, destination.GuidNullableDefault);
             Assert.AreEqual(null, destination.IntNullableDefault);
+            Assert.AreEqual(null, destination.FloatNullableDefault);
+            Assert.AreEqual(null, destination.DoubleNullableDefault);
 
             // Array of primitives
             Assert.AreNotEqual(source.BoolArray, destination.BoolArray);
@@ -176,6 +197,14 @@ namespace Runtime.Mapper.Tests
             Assert.AreEqual(Constants.String.value1, destination.StringArray[0]);
             Assert.AreEqual(Constants.String.value2, destination.StringArray[1]);
 
+            Assert.AreNotEqual(source.FloatArray, destination.FloatArray);
+            Assert.AreEqual(Constants.Float.value1, destination.FloatArray[0]);
+            Assert.AreEqual(Constants.Float.value2, destination.FloatArray[1]);
+
+            Assert.AreNotEqual(source.DoubleArray, destination.DoubleArray);
+            Assert.AreEqual(Constants.Double.value1, destination.DoubleArray[0]);
+            Assert.AreEqual(Constants.Double.value2, destination.DoubleArray[1]);
+
             // List of primitives
             Assert.AreNotEqual(source.BoolList, destination.BoolList);
             Assert.AreEqual(Constants.Bool.value1, destination.BoolList[0]);
@@ -201,6 +230,13 @@ namespace Runtime.Mapper.Tests
             Assert.AreEqual(Constants.String.value1, destination.StringList[0]);
             Assert.AreEqual(Constants.String.value2, destination.StringList[1]);
 
+            Assert.AreNotEqual(source.FloatList, destination.FloatList);
+            Assert.AreEqual(Constants.Float.value1, destination.FloatList[0]);
+            Assert.AreEqual(Constants.Float.value2, destination.FloatList[1]);
+
+            Assert.AreNotEqual(source.DoubleList, destination.DoubleList);
+            Assert.AreEqual(Constants.Double.value1, destination.DoubleList[0]);
+            Assert.AreEqual(Constants.Double.value2, destination.DoubleList[1]);
 
             // Objects
 

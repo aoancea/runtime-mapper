@@ -114,6 +114,26 @@ namespace Runtime.Mapper.Tests
             Assert.AreEqual(Enumeration.Three, destination);
         }
 
+        [TestMethod]
+        public void DeepCopyTo_Float_To_Float_DestinationCopied()
+        {
+            float source = 323.412f;
+
+            float destination = source.DeepCopyTo<float>();
+
+            Assert.AreEqual(323.412f, destination);
+        }
+
+        [TestMethod]
+        public void DeepCopyTo_Double_To_Double_DestinationCopied()
+        {
+            double source = 2.7E+3D;
+
+            double destination = source.DeepCopyTo<double>();
+
+            Assert.AreEqual(2.7E+3D, destination);
+        }
+
         #endregion
 
 

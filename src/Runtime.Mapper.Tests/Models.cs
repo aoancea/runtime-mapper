@@ -19,6 +19,10 @@ namespace Runtime.Mapper.Tests
 
         public bool Bool { get; set; }
 
+        public float Float { get; set; }
+
+        public double Double { get; set; }
+
         #endregion
 
         #region Primitives - Default
@@ -34,6 +38,10 @@ namespace Runtime.Mapper.Tests
         public Guid GuidDefault { get; set; }
 
         public bool BoolDefault { get; set; }
+
+        public float FloatDefault { get; set; }
+
+        public double DoubleDefault { get; set; }
 
         #endregion
 
@@ -77,6 +85,10 @@ namespace Runtime.Mapper.Tests
 
         public bool? BoolNullable { get; set; }
 
+        public float? FloatNullable { get; set; }
+
+        public double? DoubleNullable { get; set; }
+
         #endregion
 
         #region Nullable primitives - Default
@@ -90,6 +102,10 @@ namespace Runtime.Mapper.Tests
         public Guid? GuidNullableDefault { get; set; }
 
         public bool? BoolNullableDefault { get; set; }
+
+        public float? FloatNullableDefault { get; set; }
+
+        public double? DoubleNullableDefault { get; set; }
 
         #endregion
 
@@ -105,6 +121,10 @@ namespace Runtime.Mapper.Tests
         public Guid[] GuidArray { get; set; }
 
         public bool[] BoolArray { get; set; }
+
+        public float[] FloatArray { get; set; }
+
+        public double[] DoubleArray { get; set; }
         #endregion
 
         #region List of primitives
@@ -119,6 +139,10 @@ namespace Runtime.Mapper.Tests
         public List<Guid> GuidList { get; set; }
 
         public List<bool> BoolList { get; set; }
+
+        public List<float> FloatList { get; set; }
+
+        public List<double> DoubleList { get; set; }
         #endregion
 
         #region Objects

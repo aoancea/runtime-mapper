@@ -20,6 +20,18 @@
             public const decimal value2 = 20.20M;
         }
 
+        public class Float
+        {
+            public const float value1 = 4212.42134123f;
+            public const float value2 = 986237894123.92348f;
+        }
+
+        public class Double
+        {
+            public const double value1 = 1.8E+3D;
+            public const double value2 = 1.7E+3D;
+        }
+
         public class Guid
         {
             public static System.Guid value1 = new System.Guid("8da4c611-a758-4eb7-a352-8d82fe84dbd9");
