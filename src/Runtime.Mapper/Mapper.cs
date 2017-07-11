@@ -10,12 +10,6 @@ namespace Runtime.Mapper
 {
     public static class Mapper
     {
-        private static HashSet<Type> primitiveTypes = new HashSet<Type>(new List<Type>()
-        {
-            typeof(int),    typeof(decimal),    typeof(string),     typeof(Guid),   typeof(DateTime),   typeof(Enum),   typeof(bool),   typeof(char),   typeof(float),  typeof(double),
-            typeof(int?),   typeof(decimal?),                       typeof(Guid?),  typeof(DateTime?),                  typeof(bool?),  typeof(char?),  typeof(float?), typeof(double?)
-        });
-
         private static ConcurrentDictionary<Tuple<Type, Type>, Func<object, object, object>> mappingFunctions = new ConcurrentDictionary<Tuple<Type, Type>, Func<object, object, object>>();
 
         public static TDestination DeepCopyTo<TDestination>(this object source)
@@ -119,7 +113,7 @@ namespace Runtime.Mapper
                 {
                     sourceAccessor = Expression.Convert(sourceAccessor, destinationUnderlyingType);
                 }
-                else if (!primitiveTypes.Contains(destinationUnderlyingType))
+                else if (!IsValueTypeOrString(destinationUnderlyingType))
                 {
                     MethodInfo miDeepCopyTo = typeof(Mapper).GetMethod("DeepCopyTo", BindingFlags.Static | BindingFlags.Public).MakeGenericMethod(destinationUnderlyingType);
 
@@ -189,14 +183,14 @@ namespace Runtime.Mapper
                 Expression sourceKeyAccessor = Expression.Property(enumeratorCurrent, "Key");
                 Expression sourceValueAccessor = Expression.Property(enumeratorCurrent, "Value");
 
-                if (!primitiveTypes.Contains(destinationKeyUnderlyingType))
+                if (!IsValueTypeOrString(destinationKeyUnderlyingType))
                 {
                     MethodInfo miDeepCopyTo = typeof(Mapper).GetMethod("DeepCopyTo", BindingFlags.Static | BindingFlags.Public).MakeGenericMethod(destinationKeyUnderlyingType);
 
                     sourceKeyAccessor = Expression.Call(miDeepCopyTo, sourceKeyAccessor);
                 }
 
-                if (!primitiveTypes.Contains(destinationValueUnderlyingType))
+                if (!IsValueTypeOrString(destinationValueUnderlyingType))
                 {
                     MethodInfo miDeepCopyTo = typeof(Mapper).GetMethod("DeepCopyTo", BindingFlags.Static | BindingFlags.Public).MakeGenericMethod(destinationValueUnderlyingType);
 
@@ -226,18 +220,27 @@ namespace Runtime.Mapper
 
                 expressions.Add(checkNullCollection);
             }
-            else if (primitiveTypes.Contains(sourceType))
+            else if (IsValueTypeOrString(sourceType) || IsValueTypeOrString(destinationType))
             {
-                // map primitive type => this should not be the case for now :)
+                if (sourceType.IsGenericType && sourceType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                {
+                    sourceType = sourceType.GetGenericArguments()[0];
+
+                    if (destinationType.IsGenericType && destinationType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                    {
+                        destinationType = destinationType.GetGenericArguments()[0];
+                    }
+                }
 
                 if (sourceType == destinationType)
                     expressions.Add(Expression.Assign(destinationVar, sourceVar));
-                else
+                else if (sourceType.IsEnum && destinationType.IsEnum)
                     expressions.Add(Expression.Assign(destinationVar, Expression.Convert(sourceVar, destinationType)));
             }
-            else if (sourceType.IsEnum || (sourceType.IsGenericType && sourceType.GetGenericTypeDefinition() == typeof(Nullable<>) && sourceType.GetGenericArguments()[0].IsEnum))
+            else if (sourceType == typeof(string) || destinationType == typeof(string))
             {
-                expressions.Add(Expression.Assign(destinationVar, Expression.Convert(sourceVar, destinationType)));
+                if (sourceType == destinationType)
+                    expressions.Add(Expression.Assign(destinationVar, sourceVar));
             }
             else
             {
@@ -287,6 +290,27 @@ namespace Runtime.Mapper
             return expressions;
         }
 
+        private static Expression MapValueTypeOrString(Type sourceType, Type destinationType, Expression sourceVar, Expression destinationVar)
+        {
+            if (sourceType.IsGenericType && sourceType.GetGenericTypeDefinition() == typeof(Nullable<>))
+            {
+                sourceType = sourceType.GetGenericArguments()[0];
+
+                if (destinationType.IsGenericType && destinationType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                {
+                    destinationType = destinationType.GetGenericArguments()[0];
+                }
+            }
+
+            if (sourceType == destinationType)
+                return Expression.Assign(destinationVar, sourceVar);
+
+            if (sourceType.IsEnum && destinationType.IsEnum)
+                return Expression.Assign(destinationVar, Expression.Convert(sourceVar, destinationType));
+
+            return Expression.Empty();
+        }
+
         private static bool IsGenericList(Type type)
         {
             return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>);
@@ -295,6 +319,12 @@ namespace Runtime.Mapper
         private static bool IsGenericDictionary(Type type)
         {
             return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Dictionary<,>);
+        }
+
+        private static bool IsValueTypeOrString(Type type)
+        {
+            return type.IsValueType
+                || type == typeof(string);
         }
     }
 }
