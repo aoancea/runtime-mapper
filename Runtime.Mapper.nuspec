@@ -2,7 +2,7 @@
 <package >
 	<metadata>
 		<id>Runtime.Mapper</id>
-		<version>1.0.0-beta</version>
+		<version>0.0.1-alpha</version>
 		<authors>Alex Oancea</authors>
 		<owners>Alex Oancea</owners>
 		<licenseUrl>https://github.com/aoancea/runtime-mapper/blob/master/LICENSE</licenseUrl>
