@@ -6,4 +6,4 @@ Runtime Mapper is a configuration free object-to-object mapper in .NET. It frees
 ## Want to help?
 
 Want to file a bug, contribute some code, or improve documentation? Excellent! Read up on our
-guidelines for [contributing][contributing].
+guidelines for [contributing](https://github.com/aoancea/runtime-mapper/blob/master/CONTRIBUTING.md]).
