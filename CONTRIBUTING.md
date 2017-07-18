@@ -11,7 +11,7 @@ today! As a contributor, here are the guidelines we would like you to follow:
 
 ## Found a Bug?
 If you find a bug in the source code, you can help us by
-[submitting an issue](https://github.com/aoancea/runtime-mapper/issues) to our [GitHub Repository][https://github.com/aoancea/runtime-mapper]. Even better, you can
+[submitting an issue](https://github.com/aoancea/runtime-mapper/issues) to our [GitHub Repository](https://github.com/aoancea/runtime-mapper). Even better, you can
 [submit a Pull Request](https://github.com/aoancea/runtime-mapper/pulls) with a fix.
 
 ## Missing a Feature?
