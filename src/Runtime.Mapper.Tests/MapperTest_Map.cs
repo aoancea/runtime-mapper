@@ -36,7 +36,7 @@ namespace Runtime.Mapper.Tests
         }
 
         [TestMethod]
-        public void DeepCopyTo_ClassWithDictionaryMapsToClassWithDictionaryOfDifferentCustomType_DestinationCopied()
+        public void Map_ClassWithDictionaryMapsToClassWithDictionaryOfDifferentCustomType_DestinationCopied()
         {
             A_ClassWithDictionary source = new A_ClassWithDictionary()
             {
@@ -66,7 +66,7 @@ namespace Runtime.Mapper.Tests
 
 
         [TestMethod]
-        public void DeepCopyTo_SourceIsNull_DontCopy()
+        public void Map_SourceIsNull_DontCopy()
         {
             Cow source = null;
 
@@ -439,7 +439,7 @@ namespace Runtime.Mapper.Tests
 
 
         [TestMethod]
-        public void DeepCopyTo_Interface_To_Interface_DestinationCopied()
+        public void Map_Interface_To_Interface_DestinationCopied()
         {
             IInterface source = new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } } };
 
@@ -456,7 +456,7 @@ namespace Runtime.Mapper.Tests
         }
 
         [TestMethod]
-        public void DeepCopyTo_Interface_To_Abstract_DestinationCopied()
+        public void Map_Interface_To_Abstract_DestinationCopied()
         {
             IInterface source = new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } } };
 
@@ -473,7 +473,7 @@ namespace Runtime.Mapper.Tests
         }
 
         [TestMethod]
-        public void DeepCopyTo_Abstrat_To_Abstract_DestinationCopied()
+        public void Map_Abstrat_To_Abstract_DestinationCopied()
         {
             AbstractClass source = new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } } };
 
@@ -490,7 +490,7 @@ namespace Runtime.Mapper.Tests
         }
 
         [TestMethod]
-        public void DeepCopyTo_Abstract_To_Interface_DestinationCopied()
+        public void Map_Abstract_To_Interface_DestinationCopied()
         {
             AbstractClass source = new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } } };
 
@@ -508,7 +508,7 @@ namespace Runtime.Mapper.Tests
 
 
         [TestMethod]
-        public void DeepCopyTo_Derived_To_Base_DestinationCopied()
+        public void Map_Derived_To_Base_DestinationCopied()
         {
             Child1 source = new Child1() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } }, Prop3 = Constants.Decimal.value1 };
 
@@ -527,7 +527,7 @@ namespace Runtime.Mapper.Tests
         }
 
         [TestMethod]
-        public void DeepCopyTo_Base_To_Derived_DestinationCopied()
+        public void Map_Base_To_Derived_DestinationCopied()
         {
             Parent source = new Parent() { Prop1 = Constants.Int.value1, Prop2 = new Dictionary<Guid, string>() { { Constants.Guid.value3, Constants.String.value1 } } };
 
