@@ -3,10 +3,10 @@
 We would love for you to contribute to Runtime Mapper and help make it even better than it is
 today! As a contributor, here are the guidelines we would like you to follow:
 
- - [Feature Requests](#-found-a-bug)
- - [Submission Guidelines](#-missing-a-feature)
- - [Coding Rules](#rules)
- - [Commit Message Guidelines](#commit)
+ - [Feature Requests](#found-a-bug)
+ - [Submission Guidelines](#missing-a-feature)
+ - [Coding Rules](#coding-rules)
+ - [Commit Message Guidelines](#commit-message-guidelines)
 
 ## Found a Bug?
 If you find a bug in the source code, you can help us by
