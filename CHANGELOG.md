@@ -1,4 +1,7 @@
-# 0.0.1-beta (2017-07-13)
+# 0.0.2-alpha (2017-07-25)
+* Change Target Framework Version to v4.5(net45) for better compatibility with older versionsof .NET(there is no need to migrate towards net461 in order to use Runtime.Mapper)
+
+# 0.0.1-alpha (2017-07-13)
 First working version is released. Its Api provides two public methods:
 
 * DeepCopyTo<T>(destination)
