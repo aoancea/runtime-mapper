@@ -49,7 +49,7 @@ public void DeepCopyTo_NullableInt_To_Int_DestinationCopied()
 * **mapper-value-type**: add *object -> value*, *object -> nullable value*, *value -> object*, *nullable value -> object* tests
 
 # 0.0.2-alpha (2017-07-25)
-* Change Target Framework Version to v4.5(net45) for better compatibility with older versionsof .NET(there is no need to migrate towards net461 in order to use Runtime.Mapper)
+* Change Target Framework Version to v4.5(net45) for better compatibility with older versions of .NET(there is no need to migrate towards net461 in order to use Runtime.Mapper)
 
 # 0.0.1-alpha (2017-07-13)
 First working version is released. Its Api provides two public methods:
