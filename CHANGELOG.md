@@ -8,7 +8,7 @@
 
 * **mapper-value-type**: mapping primitive types between *value* and *nullable value* types
 
-You can now do something like this
+You can now do something like this:
 
 ```c#
 [TestMethod]
