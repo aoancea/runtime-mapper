@@ -42,7 +42,7 @@ public void DeepCopyTo_NullableInt_To_Int_DestinationCopied()
 
 ### Performance Improvements
 
-* **mapper-collection**: remove the fetching of the destinationUnderlyingType while mapping arrays or lists as it was already fetched
+* **mapper-collection**: remove the fetching of the *destinationUnderlyingType* while mapping arrays or lists as it was already fetched
 
 ### Test Coverage
 
