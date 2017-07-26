@@ -289,7 +289,7 @@ namespace Runtime.Mapper
             {
                 Expression assignmentExpression = AssignOrConvertAndAssignExpression(sourceType, destinationType, sourceVar, destinationVar);
 
-                if (sourceType.IsGenericType && sourceType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                if (IsNullableType(sourceType))
                 {
                     Expression checkNullAssignmentExpression = Expression.IfThenElse(
                         Expression.Equal(Expression.Property(sourceVar, "HasValue"), Expression.Constant(true)),
@@ -313,6 +313,11 @@ namespace Runtime.Mapper
         private static bool IsGenericDictionary(Type type)
         {
             return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Dictionary<,>);
+        }
+
+        private static bool IsNullableType(Type type)
+        {
+            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
         }
 
         private static bool IsValueTypeOrString(Type type)
