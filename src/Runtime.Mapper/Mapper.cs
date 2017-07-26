@@ -85,7 +85,7 @@ namespace Runtime.Mapper
 
             if (sourceType.IsArray || destinationType.IsArray || IsGenericList(sourceType) || IsGenericList(destinationType))
             {
-                Type destinationUnderlyingType = destinationType.IsArray ? destinationType.GetElementType() : destinationType.GetGenericArguments()[0];
+                Type destinationUnderlyingType = ArrayOrListUnderlyingType(destinationType);
 
                 Expression sourceLength = Expression.Property(sourceVar, sourceType.IsArray ? "Length" : "Count");
                 ParameterExpression collectionLength = Expression.Parameter(typeof(int), "collectionLength");
@@ -120,16 +120,12 @@ namespace Runtime.Mapper
 
                 if (destinationType.IsArray)
                 {
-                    destinationUnderlyingType = destinationType.GetElementType();
-
                     initDestination = Expression.Assign(destinationVar, Expression.NewArrayBounds(destinationUnderlyingType, sourceLength));
 
                     loopContent = Expression.Assign(Expression.ArrayAccess(destinationVar, index), sourceAccessor);
                 }
                 else
                 {
-                    destinationUnderlyingType = destinationType.GetGenericArguments()[0];
-
                     initDestination = Expression.Assign(destinationVar, Expression.New(destinationType.GetConstructor(new Type[] { typeof(int) }), new Expression[] { sourceLength }));
 
                     loopContent = Expression.Call(destinationVar, destinationType.GetMethod("Add", new Type[] { destinationType.GetGenericArguments()[0] }), sourceAccessor);
@@ -335,6 +331,14 @@ namespace Runtime.Mapper
                 type.GetGenericArguments()[0]
                 :
                 type;
+        }
+
+        private static Type ArrayOrListUnderlyingType(Type type)
+        {
+            return type.IsArray ?
+                type.GetElementType()
+                :
+                type.GetGenericArguments()[0];
         }
     }
 }
