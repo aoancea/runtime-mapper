@@ -280,8 +280,8 @@ namespace Runtime.Mapper
 
         private static Expression MapValueTypeExpression(Type sourceType, Type destinationType, Expression sourceVar, Expression destinationVar)
         {
-            Type underlyingSourceType = UnderlyingNullableType(sourceType);
-            Type underlyingDestinationType = UnderlyingNullableType(destinationType);
+            Type underlyingSourceType = NullableUnderlyingType(sourceType);
+            Type underlyingDestinationType = NullableUnderlyingType(destinationType);
 
             bool ofSameUnderlyingType = underlyingSourceType == underlyingDestinationType;
             bool bothAreEnums = underlyingSourceType.IsEnum && underlyingDestinationType.IsEnum;
@@ -329,7 +329,7 @@ namespace Runtime.Mapper
                 return Expression.Assign(destinationVar, Expression.Convert(sourceVar, destinationType));
         }
 
-        private static Type UnderlyingNullableType(Type type)
+        private static Type NullableUnderlyingType(Type type)
         {
             return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>) ?
                 type.GetGenericArguments()[0]
