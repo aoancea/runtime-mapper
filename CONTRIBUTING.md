@@ -49,6 +49,18 @@ Must be one of the following:
 * **style**: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
 * **test**: Adding missing tests or correcting existing tests
 
+### Scope
+The scope should be the name of the module affected (as perceived by person reading changelog generated from commit messages).
+
+The following is the list of supported scopes:
+
+* **mapper**
+* **mapper-string**
+* **mapper-value-type**
+* **mapper-collection**
+* **mapper-dictionary**
+* **mapper-object**
+
 
 ### Subject
 The subject contains succinct description of the change:
