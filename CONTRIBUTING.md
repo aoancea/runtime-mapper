@@ -60,6 +60,7 @@ The following is the list of supported scopes:
 * **mapper-collection**
 * **mapper-dictionary**
 * **mapper-object**
+* **test**
 
 
 ### Subject
