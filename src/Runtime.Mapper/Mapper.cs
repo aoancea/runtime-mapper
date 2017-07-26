@@ -113,7 +113,7 @@ namespace Runtime.Mapper
                 {
                     sourceAccessor = Expression.Convert(sourceAccessor, destinationUnderlyingType);
                 }
-                else if (!IsValueTypeOrString(destinationUnderlyingType))
+                else if (!destinationUnderlyingType.IsValueType)
                 {
                     MethodInfo miDeepCopyTo = typeof(Mapper).GetMethod("DeepCopyTo", BindingFlags.Static | BindingFlags.Public).MakeGenericMethod(destinationUnderlyingType);
 
@@ -183,14 +183,14 @@ namespace Runtime.Mapper
                 Expression sourceKeyAccessor = Expression.Property(enumeratorCurrent, "Key");
                 Expression sourceValueAccessor = Expression.Property(enumeratorCurrent, "Value");
 
-                if (!IsValueTypeOrString(destinationKeyUnderlyingType))
+                if (!destinationKeyUnderlyingType.IsValueType)
                 {
                     MethodInfo miDeepCopyTo = typeof(Mapper).GetMethod("DeepCopyTo", BindingFlags.Static | BindingFlags.Public).MakeGenericMethod(destinationKeyUnderlyingType);
 
                     sourceKeyAccessor = Expression.Call(miDeepCopyTo, sourceKeyAccessor);
                 }
 
-                if (!IsValueTypeOrString(destinationValueUnderlyingType))
+                if (!destinationValueUnderlyingType.IsValueType)
                 {
                     MethodInfo miDeepCopyTo = typeof(Mapper).GetMethod("DeepCopyTo", BindingFlags.Static | BindingFlags.Public).MakeGenericMethod(destinationValueUnderlyingType);
 
@@ -220,14 +220,13 @@ namespace Runtime.Mapper
 
                 expressions.Add(checkNullCollection);
             }
-            else if (IsValueTypeOrString(sourceType) || IsValueTypeOrString(destinationType))
-            {
-                expressions.Add(MapValueTypeOrStringExpression(sourceType, destinationType, sourceVar, destinationVar));
-            }
             else if (sourceType == typeof(string) || destinationType == typeof(string))
             {
-                if (sourceType == destinationType)
-                    expressions.Add(Expression.Assign(destinationVar, sourceVar));
+                expressions.Add(MapStringExpression(sourceType, destinationType, sourceVar, destinationVar));
+            }
+            else if (sourceType.IsValueType || destinationType.IsValueType)
+            {
+                expressions.Add(MapValueTypeExpression(sourceType, destinationType, sourceVar, destinationVar));
             }
             else
             {
@@ -277,7 +276,15 @@ namespace Runtime.Mapper
             return expressions;
         }
 
-        private static Expression MapValueTypeOrStringExpression(Type sourceType, Type destinationType, Expression sourceVar, Expression destinationVar)
+        private static Expression MapStringExpression(Type sourceType, Type destinationType, Expression sourceVar, Expression destinationVar)
+        {
+            if (sourceType == destinationType)
+                return Expression.Assign(destinationVar, sourceVar);
+
+            return Expression.Empty();
+        }
+
+        private static Expression MapValueTypeExpression(Type sourceType, Type destinationType, Expression sourceVar, Expression destinationVar)
         {
             Type underlyingSourceType = UnderlyingNullableType(sourceType);
             Type underlyingDestinationType = UnderlyingNullableType(destinationType);
@@ -318,12 +325,6 @@ namespace Runtime.Mapper
         private static bool IsNullableType(Type type)
         {
             return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
-        }
-
-        private static bool IsValueTypeOrString(Type type)
-        {
-            return type.IsValueType
-                || type == typeof(string);
         }
 
         private static Expression AssignOrConvertAndAssignExpression(Type sourceType, Type destinationType, Expression sourceVar, Expression destinationVar)
