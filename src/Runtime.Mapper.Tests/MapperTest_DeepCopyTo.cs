@@ -35,16 +35,6 @@ namespace Runtime.Mapper.Tests
         #region Primitives
 
         [TestMethod]
-        public void DeepCopyTo_Int_To_Int_DestinationCopied()
-        {
-            int source = 5;
-
-            int destination = source.DeepCopyTo<int>();
-
-            Assert.AreEqual(5, destination);
-        }
-
-        [TestMethod]
         public void DeepCopyTo_Decimal_To_Decimal_DestinationCopied()
         {
             decimal source = 5M;
@@ -62,16 +52,6 @@ namespace Runtime.Mapper.Tests
             string destination = source.DeepCopyTo<string>();
 
             Assert.AreEqual("123", destination);
-        }
-
-        [TestMethod]
-        public void DeepCopyTo_Guid_To_Guid_DestinationCopied()
-        {
-            Guid source = Constants.Guid.value3;
-
-            Guid destination = source.DeepCopyTo<Guid>();
-
-            Assert.AreEqual(Constants.Guid.value3, destination);
         }
 
         [TestMethod]
@@ -102,16 +82,6 @@ namespace Runtime.Mapper.Tests
             char destination = source.DeepCopyTo<char>();
 
             Assert.AreEqual('x', destination);
-        }
-
-        [TestMethod]
-        public void DeepCopyTo_Enum_To_Enum_DestinationCopied()
-        {
-            Enumeration source = Enumeration.Three;
-
-            Enumeration destination = source.DeepCopyTo<Enumeration>();
-
-            Assert.AreEqual(Enumeration.Three, destination);
         }
 
         [TestMethod]
@@ -702,7 +672,7 @@ namespace Runtime.Mapper.Tests
         }
 
         #endregion
-        
+
         #region Array -> Array - Derived types
 
         [TestMethod]
@@ -1501,7 +1471,6 @@ namespace Runtime.Mapper.Tests
         }
 
         #endregion
-
 
 
         #region Derived types

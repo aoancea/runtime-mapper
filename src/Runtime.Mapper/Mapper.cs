@@ -222,20 +222,36 @@ namespace Runtime.Mapper
             }
             else if (IsValueTypeOrString(sourceType) || IsValueTypeOrString(destinationType))
             {
+                Type underlyingSourceType = UnderlyingNullableType(sourceType);
+                Type underlyingDestinationType = UnderlyingNullableType(destinationType);
+
                 if (sourceType.IsGenericType && sourceType.GetGenericTypeDefinition() == typeof(Nullable<>))
                 {
-                    sourceType = sourceType.GetGenericArguments()[0];
+                    Expression assignmentExpression;
+                    if (underlyingSourceType == underlyingDestinationType)
+                        assignmentExpression = AssignNullableTypeExpression(sourceType, destinationType, sourceVar, destinationVar);
+                    else if (underlyingSourceType.IsEnum && underlyingDestinationType.IsEnum)
+                        assignmentExpression = AssignNullableTypeExpression(sourceType, destinationType, sourceVar, destinationVar);
+                    else
+                        assignmentExpression = null;
 
-                    if (destinationType.IsGenericType && destinationType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                    if (assignmentExpression != null)
                     {
-                        destinationType = destinationType.GetGenericArguments()[0];
+                        Expression checkNullAssignmentExpression = Expression.IfThenElse(
+                            Expression.Equal(Expression.Property(sourceVar, "HasValue"), Expression.Constant(true)),
+                            assignmentExpression,
+                            Expression.Assign(destinationVar, Expression.Default(destinationType)));
+
+                        expressions.Add(checkNullAssignmentExpression);
                     }
                 }
-
-                if (sourceType == destinationType)
-                    expressions.Add(Expression.Assign(destinationVar, sourceVar));
-                else if (sourceType.IsEnum && destinationType.IsEnum)
-                    expressions.Add(Expression.Assign(destinationVar, Expression.Convert(sourceVar, destinationType)));
+                else
+                {
+                    if (underlyingSourceType == underlyingDestinationType)
+                        expressions.Add(AssignNullableTypeExpression(sourceType, destinationType, sourceVar, destinationVar));
+                    else if (underlyingSourceType.IsEnum && underlyingDestinationType.IsEnum)
+                        expressions.Add(AssignNullableTypeExpression(sourceType, destinationType, sourceVar, destinationVar));
+                }
             }
             else if (sourceType == typeof(string) || destinationType == typeof(string))
             {
@@ -325,6 +341,22 @@ namespace Runtime.Mapper
         {
             return type.IsValueType
                 || type == typeof(string);
+        }
+
+        private static Expression AssignNullableTypeExpression(Type sourceType, Type destinationType, Expression sourceVar, Expression destinationVar)
+        {
+            if (sourceType == destinationType)
+                return Expression.Assign(destinationVar, sourceVar);
+            else
+                return Expression.Assign(destinationVar, Expression.Convert(sourceVar, destinationType));
+        }
+
+        private static Type UnderlyingNullableType(Type type)
+        {
+            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>) ?
+                type.GetGenericArguments()[0]
+                :
+                type;
         }
     }
 }
