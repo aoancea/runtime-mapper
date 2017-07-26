@@ -85,8 +85,6 @@ namespace Runtime.Mapper
 
             if (sourceType.IsArray || destinationType.IsArray || IsGenericList(sourceType) || IsGenericList(destinationType))
             {
-                // map array or list
-
                 Type destinationUnderlyingType = destinationType.IsArray ? destinationType.GetElementType() : destinationType.GetGenericArguments()[0];
 
                 Expression sourceLength = Expression.Property(sourceVar, sourceType.IsArray ? "Length" : "Count");
@@ -147,8 +145,8 @@ namespace Runtime.Mapper
                     Expression.Loop(
                         Expression.IfThenElse(
                             loopCondition,
-                            Expression.Block(loopContent, increment),
-                            Expression.Break(label)),
+                                Expression.Block(loopContent, increment),
+                                Expression.Break(label)),
                         label)
                 );
 
@@ -160,8 +158,6 @@ namespace Runtime.Mapper
             }
             else if (IsGenericDictionary(sourceType) || IsGenericDictionary(destinationType))
             {
-                // map dictionary
-
                 Type sourceKeyUnderlyingType = sourceType.GetGenericArguments()[0];
                 Type sourceValueUnderlyingType = sourceType.GetGenericArguments()[1];
 
@@ -208,8 +204,8 @@ namespace Runtime.Mapper
                     Expression.Loop(
                         Expression.IfThenElse(
                             Expression.Equal(moveNextCall, Expression.Constant(true)),
-                            Expression.Block(new[] { loopContent }),
-                            Expression.Break(breakLabel)
+                                Expression.Block(new[] { loopContent }),
+                                Expression.Break(breakLabel)
                         ),
                     breakLabel)
                 );
@@ -230,8 +226,6 @@ namespace Runtime.Mapper
             }
             else
             {
-                // map object's properties
-
                 if (deepCopyCustomTypes)
                 {
                     MethodInfo miDeepCopyTo = typeof(Mapper).GetMethod("DeepCopyTo", BindingFlags.Static | BindingFlags.Public).MakeGenericMethod(destinationType);
@@ -300,8 +294,8 @@ namespace Runtime.Mapper
                 {
                     Expression checkNullAssignmentExpression = Expression.IfThenElse(
                         Expression.Equal(Expression.Property(sourceVar, "HasValue"), Expression.Constant(true)),
-                        assignmentExpression,
-                        Expression.Assign(destinationVar, Expression.Default(destinationType)));
+                            assignmentExpression,
+                            Expression.Assign(destinationVar, Expression.Default(destinationType)));
 
                     return checkNullAssignmentExpression;
                 }
