@@ -2,7 +2,7 @@
 
 ### Bug Fixes
 
-* **mapper-string**: decouple string mapping from value types mapping as we don't want to get into a mapping a string to an int which might crash
+* **mapper-string**: decouple string mapping from value types mapping as we don't want to get into mapping a string to an int which might crash
 
 ### Features
 
