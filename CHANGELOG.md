@@ -1,3 +1,6 @@
+# 0.0.4-alpha (2019-04-05)
+* Change Target Framework Version to netstandard2.0
+
 # 0.0.3-alpha (2017-07-26)
 
 ### Bug Fixes
