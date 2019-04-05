@@ -2,7 +2,7 @@
 <package >
 	<metadata>
 		<id>Runtime.Mapper</id>
-		<version>0.0.3-alpha</version>
+		<version>0.0.4-alpha</version>
 		<authors>Alex Oancea</authors>
 		<owners>Alex Oancea</owners>
 		<licenseUrl>https://github.com/aoancea/runtime-mapper/blob/master/LICENSE</licenseUrl>
@@ -12,6 +12,6 @@
 		<releaseNotes></releaseNotes>
 	</metadata>
 	<files>
-		<file src="src\Runtime.Mapper\bin\Release\Runtime.Mapper.dll" target="lib\net45" />
+    <file src="src\Runtime.Mapper\bin\Release\Runtime.Mapper.dll" target="lib\netstandard2.0" />
 	</files>
 </package>
